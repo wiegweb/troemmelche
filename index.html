@@ -837,73 +837,6 @@ code.uri{
     scroll-behavior:auto!important
   }
 }
-@media(max-width:600px){
-  #mSongs table,#mSongs tbody{
-    display:block;
-    width:100%
-  }
-  #mSongs thead{
-    display:none
-  }
-  #songRows tr{
-    display:grid;
-    grid-template-columns:minmax(0,1fr) 100px;
-    gap:8px;
-    position:relative;
-    border-top:1px solid var(--line);
-    padding:16px 0
-  }
-  #songRows td{
-    display:block;
-    padding:0;
-    border:0;
-    min-width:0
-  }
-  #songRows td:nth-child(1),#songRows td:nth-child(2),#songRows td:nth-child(5),#songRows td:nth-child(6){
-    grid-column:1/-1
-  }
-  #songRows td:first-child{
-    padding-right:52px
-  }
-  #songRows td:nth-child(4){
-    align-self:end;
-    padding-bottom:12px
-  }
-  #songRows td:nth-child(7){
-    position:absolute;
-    right:0;
-    top:32px
-  }
-  #songRows input[type=text],#songRows input[type=number]{
-    min-width:0;
-    width:100%
-  }
-  #songRows td:nth-child(1)::before{
-    content:"Interpret"
-  }
-  #songRows td:nth-child(2)::before{
-    content:"Titel"
-  }
-  #songRows td:nth-child(3)::before{
-    content:"Jahr"
-  }
-  #songRows td:nth-child(5)::before{
-    content:"Eigener Musiklink"
-  }
-  #songRows td::before{
-    display:block;
-    font-size:11px;
-    color:var(--mut);
-    margin-bottom:4px
-  }
-  #songRows .st{
-    overflow-wrap:anywhere;
-    min-width:0
-  }
-  #mSongs>.box>.row{
-    gap:6px
-  }
-}
 .song-selection{
   max-height:310px;
   overflow:auto;
@@ -950,44 +883,7 @@ code.uri{
   color:var(--mut);
   font-weight:400
 }
-.add-song{
-  border-bottom:1px solid var(--line);
-  padding:0 0 12px
-}
-.add-song summary{
-  cursor:pointer;
-  font-size:14px;
-  font-weight:650;
-  min-height:44px;
-  padding:12px 0
-}
-.add-song form{
-  margin-top:8px
-}
-.add-song label{
-  display:block;
-  font-size:12px;
-  font-weight:650
-}
-.add-song input{
-  display:block;
-  margin-top:5px;
-  width:100%;
-  min-height:44px;
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:6px;
-  background:var(--paper);
-  color:var(--ink);
-  font-size:16px
-}
-.add-song .btn{
-  width:100%
-}
-.manage-songs{
-  margin-top:12px;
-  width:100%
-}
+
 .logo h1{
   display:inline;
   margin:0;
@@ -1026,6 +922,31 @@ code.uri{
 .donation-footer{margin:30px auto 0;padding:16px 0 4px;border-top:2px solid var(--rot);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;max-width:480px;color:var(--rot)}
 .donation-footer strong{font-size:14px;font-weight:700}.donation-footer p{font-size:12px;margin:4px 0 0;color:var(--mut)}.donation-button{background:transparent;color:var(--rot);border:1px solid var(--rot);border-radius:6px;min-height:44px;padding:9px 12px;font-size:12px;font-weight:650;flex-shrink:0}
 @media(max-width:380px){.donation-footer{flex-wrap:wrap}.donation-button{margin-left:auto}}
+
+/* Compact grouped controls */
+.topbar{border-top:0;background:var(--rot);padding-top:env(safe-area-inset-top)}
+header{border-bottom:0;max-width:520px;padding:16px 18px}
+.logo,.topbar .ib{color:#fff}
+.topbar .ib:hover{background:#ffffff20}
+#btnRules{border:1.5px solid #ffffffa0;border-radius:50%;font-size:20px;line-height:1;min-width:44px;min-height:44px;padding:8px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.box{border-radius:14px}
+.hero{padding:6px 0 20px}.hero .claim{font-size:18px;letter-spacing:-.025em}
+.selection-actions,.selection-footer{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.text-button,.icon-button{border:0;background:transparent;color:var(--rot);font:inherit;font-weight:600;min-height:44px;padding:8px 4px;border-radius:8px;cursor:pointer}
+.text-button{font-size:13px}.icon-button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;padding:12px}
+.icon-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#addSong{font-size:28px;font-weight:400;margin-left:auto}.text-button:hover,.icon-button:hover{background:var(--tint)}
+.song-selection{max-height:440px;margin:4px 0 8px;scrollbar-width:thin}
+.song-option{gap:0;padding:8px 0;cursor:default}
+.song-check{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;min-height:44px}
+.song-check>span{flex:1;min-width:0}.song-option b{font-size:14px;font-weight:600}.song-option small{font-size:12px;line-height:1.35}
+.song-option .st:empty{display:none}.song-option .st{font-size:11px}
+.ios-form label{font-size:13px;font-weight:600}.ios-form input{display:block;width:100%;font:inherit;font-size:16px;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);min-height:44px}
+#deleteSong{color:var(--rot)}[hidden]{display:none!important}
+.rules{padding-left:22px;font-size:15px;line-height:1.5}.rules li{margin:0 0 16px;padding-left:3px}.rules strong{display:block;color:var(--ink);font-size:16px;margin-bottom:3px}
+@media(max-width:380px){header{padding:14px 16px}.song-check{gap:7px}.song-option .icon-button{padding:13px}.selection-actions{gap:3px}.text-button{font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -1033,7 +954,6 @@ code.uri{
   <div class="logo"><span class="mark"></span><h1 id="gameName"></h1></div>
   <div class="nav">
     <button class="ib" id="btnNew" style="display:none">↺ Neu</button>
-    <button class="ib" id="btnSongs">Songs</button>
     <button class="ib" id="btnRules" aria-label="Regeln">?</button>
   </div>
 </header></div>
@@ -1041,18 +961,23 @@ code.uri{
 <main id="app" tabindex="-1"></main>
 <div id="ytHost"><div id="ytFrame"></div></div>
 
-<!-- Songliste -->
-<div class="modal" id="mSongs" role="dialog" aria-modal="true" aria-label="Songliste"><div class="box">
-  <div class="mhead"><h2>Songs (<span id="songCount"></span>)</h2><button class="btn sm ghost" data-close>Schließen</button></div>
-  <div class="row" style="flex-wrap:wrap;margin:6px 0 12px">
-    <button class="btn sm red" id="testAll" style="flex:0 0 auto">Alle Songs testen</button>
-    <button class="btn sm ghost" id="addSong" style="flex:0 0 auto">+ Song</button>
-  </div>
-  <div style="overflow:auto;max-height:58vh">
-    <table><thead><tr><th>Interpret</th><th>Titel</th><th>Jahr</th><th></th><th>Eigener Link</th><th>Test</th><th></th></tr></thead><tbody id="songRows"></tbody></table>
-  </div>
+<!-- Einzelnen Song bearbeiten -->
+<div class="modal" id="mSongs" role="dialog" aria-modal="true" aria-labelledby="songEditorTitle"><div class="box" style="max-width:480px">
+  <div class="mhead"><h2 id="songEditorTitle">Song bearbeiten</h2><button class="btn sm ghost" data-close>Abbrechen</button></div>
+  <form id="songEditor" class="stack ios-form">
+    <label>Interpret<input name="artist" required maxlength="150" autocomplete="off"></label>
+    <label>Titel<input name="title" required maxlength="200" autocomplete="off"></label>
+    <label>Erscheinungsjahr<input name="year" type="number" required min="1800" inputmode="numeric"></label>
+    <label>Musiklink <span class="mut">optional</span><input name="link" type="text" placeholder="YouTube oder Spotify" autocomplete="off"></label>
+    <p class="hint">Ohne Link sucht das Spiel einen passenden Ausschnitt.</p>
+    <button class="btn red" type="submit">Sichern</button>
+    <button class="btn ghost" id="deleteSong" type="button">Song löschen</button>
+  </form>
+</div></div>
+<div class="modal" id="mBackup" role="dialog" aria-modal="true" aria-label="Liste sichern"><div class="box" style="max-width:480px">
+<div class="mhead"><h2>Deine Liste</h2><button class="btn sm ghost" data-close>Fertig</button></div>
   <details class="box" style="margin-top:12px">
-    <summary>Erklärung & Liste sichern</summary>
+    <summary>Liste sichern & wiederherstellen</summary>
     <p class="hint"><span class="tag ok">vorgegeben</span> = Jahr aus der Standardliste, <span class="tag">bitte prüfen</span> = Quellenlage unklar oder widersprüchlich. Änderungen werden in diesem Browser gespeichert.</p>
     <p class="hint">Musik kommt über Spotify (wenn verbunden), sonst über YouTube – bis zu 90 Sekunden ab Anfang. Klappt ein Video nicht, nimmt das Spiel das nächste, als Notlösung einen 30-Sek.-Ausschnitt von Apple. „Alle Songs testen“ prüft die Wiedergabe vorab. Das kann mehrere Minuten dauern und lässt sich abbrechen. In „Eigener Link“ kannst du einen YouTube- oder Spotify-Link einfügen, der dann zuerst gespielt wird.</p>
     <div class="row" style="flex-wrap:wrap">
@@ -1084,13 +1009,11 @@ const DONATE_URL  = "";   // ← hier später den Spendenlink eintragen, z. B. "
 const PLAY_SECONDS = 90;
 
 const RULES = [
-  "Ihr spielt reihum auf einem Gerät. Nennt eure Antworten laut, bevor ihr die Karte aufdeckt.",
-  "Zeitstrahl: Tippt auf die passende Lücke. Richtig eingeordnet bleibt die Karte. Gleiche Jahre dürfen nebeneinander liegen. Es zählt das Erscheinungsjahr, nicht eine spätere Karnevalssession.",
-  "Klassisch: Interpret und Titel erraten. Titel raten: Interpret ist vorgegeben. Interpret raten: Titel ist vorgegeben. Mix wechselt diese drei Varianten. Nur das Jahr zeigt beides.",
-  "Für jeden richtig erratenen, vorher verdeckten Bestandteil gibt es 1 Bonuspunkt und 1 Kamelle. Auch bei falsch eingeordnetem Jahr. Nach dem Aufdecken bestätigt ihr getrennt, was richtig war; bis zum Teamwechsel könnt ihr die Wertung korrigieren.",
-  "1 Kamelle überspringt einen Song, 3 Kamelle kaufen eine Karte. Ausgeben verringert nur die Kamelle, nicht die gesammelten Bonuspunkte.",
-  "Songduell: Ohne Jahreszahlen oder Zeitstrahl, nur Interpret und Titel erraten. Hier entscheiden die Bonuspunkte über den Sieg. In den anderen Modi gewinnt, wer zuerst die Zielzahl an Karten hat.",
-  "Ihr hört bis zu 90 Sekunden. Apple liefert nur einen kurzen Ausschnitt. Falls nötig, startet mit Play."
+  "<strong>Hören & raten.</strong> Reihum auf einem Gerät spielen. Verdeckten Titel oder Interpreten laut nennen.",
+  "<strong>Jahr einordnen.</strong> Auf eine Lücke im Zeitstrahl tippen. Richtig? Karte behalten. Gleiche Jahre dürfen nebeneinander liegen. Es zählt das Erscheinungsjahr.",
+  "<strong>Bonuspunkte.</strong> Nach dem Aufdecken jeden richtigen Tipp bestätigen: je <b>1 Punkt + 1 Kamelle</b>, auch bei falschem Jahr. Vorgegebene Angaben zählen nicht.",
+  "<strong>Kamelle einsetzen.</strong> <b>1</b> zum Überspringen, <b>3</b> für eine Karte. Eure Bonuspunkte bleiben erhalten.",
+  "<strong>Ziel erreichen.</strong> Die gewählte Kartenzahl gewinnt. Im <b>Songduell</b> zählt stattdessen das Punkteziel – ohne Zeitstrahl."
 ];
 
 const MODES = {
@@ -1641,7 +1564,8 @@ let setupOpen = { opts:false, music:false, songs:false };
 function namesFor(theme, n){ const base = (THEMES[theme]||{}).names || []; return Array.from({length:n}, (_,i)=> base[i] || ("Team " + (i+1))); }
 function renderSetupIfOpen(){ if(!game && $("#setupRoot")) renderSetup(); }
 function renderSetup(){
-  stopAll(); P.song = null; P.mode = null; game = null;
+  if(testing) cancelTests();
+  listPlaying=null; stopAll(); P.song = null; P.mode = null; game = null;
   $("#btnNew").style.display = "none";
   while(setup.names.length < setup.count) setup.names.push(namesFor(setup.theme, setup.count)[setup.names.length]);
   const n = setup.count;
@@ -1657,7 +1581,7 @@ function renderSetup(){
         <div class="chips" style="margin-top:14px">${Object.entries(THEMES).map(([k,t])=>`<button class="chip ${setup.theme===k?"on":""}" data-th="${k}">${t.label}</button>`).join("")}</div>
         <div class="names" style="margin-top:12px">${setup.names.slice(0,n).map((nm,i)=>`<input type="text" data-i="${i}" aria-label="Name Team ${i+1}" value="${esc(nm)}" maxlength="22">`).join("")}</div>
       </div>
-      <button class="btn red big" id="start">Loss jonn!</button>
+      <button class="btn red big" id="start">Opjepass!</button>
       <p class="selection-warning" id="selectionWarning" hidden></p>
       <details class="box" id="dOpts" ${setupOpen.opts?"open":""}><summary>Spielart & Ziel <small>${MODES[setup.mode].label} · ${setup.target} ${isDuel()?"Punkte":"Karten"}</small></summary>
         <div class="mode-grid" id="modeSeg">${Object.entries(MODES).map(([key,mode])=>`<button data-m="${key}" aria-pressed="${setup.mode===key}" class="${setup.mode===key?"on":""}">${mode.label}</button>`).join("")}</div>
@@ -1670,20 +1594,10 @@ function renderSetup(){
       </details>
       <details class="box" id="dSelection" ${setupOpen.songs?"open":""}>
         <summary>Songauswahl <small id="selectionCount"></small></summary>
-        <p class="hint">Nur angehakte Songs kommen in den Stapel. Eure Auswahl bleibt auf diesem Gerät gespeichert.</p>
-        <div class="row selection-actions"><button class="btn sm ghost" id="selectAll">Alle auswählen</button><button class="btn sm ghost" id="selectNone">Keine auswählen</button></div>
+        <p class="hint">Angehakt heißt: im Stapel. Automatisch auf diesem Gerät gespeichert.</p>
+        <div class="selection-actions"><button class="text-button" id="selectAll">Alle auswählen</button><button class="text-button" id="selectNone">Keine auswählen</button><button class="icon-button" id="addSong" aria-label="Song hinzufügen">+</button></div>
         <div class="song-selection" id="songSelection"></div>
-        <details class="add-song"><summary>+ Eigenen Song hinzufügen</summary>
-          <form id="newSongForm" class="stack">
-            <label>Interpret<input name="artist" required maxlength="150" autocomplete="off"></label>
-            <label>Titel<input name="title" required maxlength="200" autocomplete="off"></label>
-            <label>Jahr<input name="year" type="number" required min="1800" max="${new Date().getFullYear()}" inputmode="numeric" placeholder="z. B. 1998"></label>
-            <label>YouTube- oder Spotify-Link <span class="mut">(optional)</span><input name="link" type="text" autocomplete="off" placeholder="https://…"></label>
-            <p class="hint">Ohne Link wird nach einem passenden Ausschnitt gesucht. Das Jahr tragt ihr selbst ein.</p>
-            <button class="btn" type="submit">Hinzufügen & auswählen</button>
-          </form>
-        </details>
-        <button class="btn sm ghost manage-songs" id="manageSongs">Songs bearbeiten & testen</button>
+        <div class="selection-footer"><button class="text-button" id="testAll">Alle testen</button><button class="text-button" id="backupSongs">Liste sichern</button></div>
       </details>
     </div>
     ${donationFooter()}
@@ -1710,27 +1624,58 @@ function selectionSummary(){
   const warning = $("#selectionWarning"); if(warning){ warning.hidden=count>=setup.count+3; warning.textContent=`Mindestens ${setup.count+3} Songs mit gültigem Jahr auswählen.`; }
   const start = $("#start"); if(start){ start.disabled = count < setup.count + 3; start.title = start.disabled ? `Mindestens ${setup.count+3} gültige Songs auswählen` : ""; }
 }
+const SONG_ICONS = {
+  edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15z"/></svg>',
+  play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4 12 8-12 8z"/></svg>',
+  pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>'
+};
 function renderSongSelection(){
   const list = $("#songSelection"); if(!list) return;
-  list.innerHTML = songs.map((s,i)=>`<label class="song-option"><input type="checkbox" data-song="${i}" ${s.enabled!==false?"checked":""}><span><b>${esc(s.t||"Ohne Titel")}</b><small>${esc(s.a||"Ohne Interpret")} · ${validYear(s.y)?esc(s.y):"Jahr fehlt"}</small></span></label>`).join("");
+  list.innerHTML = songs.map((s,i)=>`<div class="song-option">
+    <label class="song-check"><input type="checkbox" data-song="${i}" ${s.enabled!==false?"checked":""}><span><b>${esc(s.t||"Ohne Titel")}</b><small>${esc(s.a||"Ohne Interpret")} · ${validYear(s.y)?esc(s.y):"Jahr fehlt"}</small><small class="st" aria-live="polite">${testStatus[songKey(s)]||""}</small></span></label>
+    <button class="icon-button" data-edit="${i}" aria-label="${esc(s.t)} bearbeiten">${SONG_ICONS.edit}</button><button class="icon-button" data-play="${i}" aria-label="${esc(s.t)} ${listPlaying===s?'stoppen':'testen'}">${listPlaying===s?SONG_ICONS.pause:SONG_ICONS.play}</button>
+  </div>`).join("");
   list.querySelectorAll("input").forEach(input=>input.onchange=()=>{ songs[+input.dataset.song].enabled=input.checked; saveSongs(); selectionSummary(); });
+  list.querySelectorAll("[data-edit]").forEach(button=>button.onclick=()=>editSong(+button.dataset.edit));
+  list.querySelectorAll("[data-play]").forEach(button=>button.onclick=()=>{
+    const song=songs[+button.dataset.play]; unlockAudio(); spActivate();
+    if(listPlaying===song){stopAll();listPlaying=null;}
+    else {listPlaying=song;startSong(song,true);watchListTitle(song);}
+    renderSongSelection();
+  });
   selectionSummary();
 }
 function bindSongSelection(){
   renderSongSelection();
-  $("#dSelection").ontoggle = e=>setupOpen.songs=e.target.open;
-  $("#selectAll").onclick=()=>{ songs.forEach(s=>s.enabled=true); saveSongs(); renderSongSelection(); };
-  $("#selectNone").onclick=()=>{ songs.forEach(s=>s.enabled=false); saveSongs(); renderSongSelection(); };
-  $("#manageSongs").onclick=()=>{ renderSongs(); openM("#mSongs"); };
-  $("#newSongForm").onsubmit=e=>{
-    e.preventDefault(); const form=e.currentTarget, fields=new FormData(form);
-    const a=String(fields.get("artist")||"").trim(), t=String(fields.get("title")||"").trim(), y=fields.get("year"), link=parseLink(fields.get("link"));
-    if(!a || !t || !validYear(y)){ toast("Bitte Interpret, Titel und ein gültiges Jahr eintragen."); return; }
-    if(link.bad){ toast("Bitte einen YouTube- oder Spotify-Songlink eintragen."); return; }
-    if(songs.some(s=>songKey(s)===songKey({a,t}))){ toast("Dieser Song ist bereits in der Liste."); return; }
-    songs.push({a,t,y:Number(y),c:0,enabled:true,yt:[],...link}); saveSongs(); form.reset(); renderSongSelection(); toast("Song hinzugefügt und ausgewählt.");
-  };
+  $("#dSelection").ontoggle=e=>setupOpen.songs=e.target.open;
+  $("#selectAll").onclick=()=>{songs.forEach(s=>s.enabled=true);saveSongs();renderSongSelection();};
+  $("#selectNone").onclick=()=>{songs.forEach(s=>s.enabled=false);saveSongs();renderSongSelection();};
+  $("#addSong").onclick=()=>editSong(null);
+  $("#backupSongs").onclick=()=>openM("#mBackup");
+  $("#testAll").onclick=testAllSongs;
 }
+let editingSong=null;
+function editSong(index){
+  stopAll();listPlaying=null;renderSongSelection();
+  editingSong=index===null?null:songs[index];
+  const s=editingSong||{},f=$("#songEditor");
+  f.reset();f.elements.artist.value=s.a||"";f.elements.title.value=s.t||"";
+  f.elements.year.max=new Date().getFullYear();f.elements.year.value=s.y||"";
+  f.elements.link.value=linkValue(s);
+  $("#songEditorTitle").textContent=editingSong?"Song bearbeiten":"Song hinzufügen";
+  $("#deleteSong").hidden=!editingSong;
+  openM("#mSongs");f.elements.artist.focus();
+}
+$("#songEditor").onsubmit=e=>{
+  e.preventDefault();const f=e.currentTarget,a=f.elements.artist.value.trim(),t=f.elements.title.value.trim(),y=+f.elements.year.value,link=parseLink(f.elements.link.value);
+  if(!a||!t||!validYear(y)){toast("Bitte Interpret, Titel und gültiges Jahr eintragen.");return;}
+  if(link.bad){toast("Bitte einen YouTube- oder Spotify-Link eintragen.");return;}
+  if(songs.some(s=>s!==editingSong&&songKey(s)===songKey({a,t}))){toast("Dieser Song ist bereits in der Liste.");return;}
+  if(editingSong){const oldKey=songKey(editingSong);delete spCache[oldKey];delete testStatus[oldKey];delete editingSong._it;Object.assign(editingSong,{a,t,y,c:editingSong.y===y?editingSong.c:0,u:undefined,sp:undefined,...link});}
+  else songs.push({a,t,y,c:0,enabled:true,yt:[],...link});
+  saveSongs();$("#mSongs [data-close]").click();
+};
+$("#deleteSong").onclick=()=>{if(editingSong){songs.splice(songs.indexOf(editingSong),1);saveSongs();$("#mSongs [data-close]").click();}};
 
 function renderSpotifyBox(){
   const uri = redirectUri();
@@ -1906,42 +1851,9 @@ function endGame(deckEmpty,winner){
 const testStatus = {};
 let listPlaying = null;
 function linkValue(s){ return s.sp ? "https://open.spotify.com/track/"+s.sp : s.u ? "https://youtu.be/"+s.u : ""; }
-function renderSongs(){
-  $("#songCount").textContent = songs.length;
-  const tb = $("#songRows"); tb.innerHTML = "";
-  songs.forEach((s,i)=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td><input type="text" data-k="a" aria-label="Interpret" value="${esc(s.a)}"></td>
-      <td><input type="text" data-k="t" aria-label="Titel" value="${esc(s.t)}"></td>
-      <td><input type="number" data-k="y" aria-label="Erscheinungsjahr" min="1800" max="${new Date().getFullYear()}" value="${esc(s.y)}"></td>
-      <td><span class="tag ${s.c?"ok":""}">${s.c?"vorgegeben":"bitte prüfen"}</span></td>
-      <td><input type="text" class="lnk" data-k="link" aria-label="Eigener Musiklink" placeholder="YouTube/Spotify" value="${esc(linkValue(s))}"></td>
-      <td><div style="display:flex;gap:4px;align-items:center"><button class="btn sm ghost" data-act="play" aria-label="Song anhören oder pausieren" title="Anhören">▶︎</button><button class="btn sm ghost" data-act="alt" aria-label="Andere Quelle testen" title="Nächste Quelle">↻</button><span class="st">${testStatus[songKey(s)]||""}</span></div></td>
-      <td><button class="btn sm ghost" data-act="del" aria-label="Song löschen" title="Löschen">✕</button></td>`;
-    tr.querySelectorAll("input").forEach(inp => inp.oninput = e => {
-      const k = e.target.dataset.k;
-      if(k === "y"){ s.y = e.target.value === "" ? null : +e.target.value; s.c = 0; const tg = tr.querySelector(".tag"); tg.className = "tag"; tg.textContent = "bitte prüfen"; }
-      else if(k === "link"){
-        const r = parseLink(e.target.value);
-        if(r.bad){ e.target.style.borderColor = "var(--rot)"; return; }
-        e.target.style.borderColor = ""; s.u = r.u; s.sp = r.sp; delete spCache[songKey(s)];
-      } else { delete spCache[songKey(s)]; delete s._it; s[k] = e.target.value; }
-      saveSongs();
-    });
-    tr.querySelector('[data-act="del"]').onclick = () => { songs.splice(i,1); saveSongs(); renderSongs(); };
-    tr.querySelector('[data-act="play"]').onclick = e => {
-      unlockAudio(); spActivate();
-      if(listPlaying === s){ stopAll(); listPlaying = null; e.currentTarget.textContent = "▶︎"; return; }
-      document.querySelectorAll('#songRows [data-act="play"]').forEach(b=>b.textContent="▶︎");
-      listPlaying = s; e.currentTarget.textContent = "❚❚"; startSong(s, true); watchListTitle(s);
-    };
-    tr.querySelector('[data-act="alt"]').onclick = () => { unlockAudio(); spActivate(); if(listPlaying !== s){ listPlaying = s; startSong(s,true); } else nextMatch(); watchListTitle(s); };
-    tb.appendChild(tr);
-  });
-}
 function setStatus(s, html){
   testStatus[songKey(s)] = html;
-  const row = document.querySelectorAll("#songRows tr")[songs.indexOf(s)];
+  const row = document.querySelectorAll("#songSelection .song-option")[songs.indexOf(s)];
   if(row) row.querySelector(".st").innerHTML = html;
 }
 function watchListTitle(s){
@@ -1990,14 +1902,19 @@ function cancelTests(){
   testRun++; testing = false;
   if(testHook && testHook.cancel) testHook.cancel();
   try{ ytPlayer && ytPlayer.unMute(); }catch(e){}
-  $("#testAll").textContent = "Alle Songs testen";
-  document.querySelectorAll('#mSongs input, #mSongs textarea, #mSongs button:not(#testAll):not([data-close])').forEach(el=>el.disabled=false);
+  if($("#testAll")) $("#testAll").textContent = "Alle testen";
+  document.querySelectorAll('#dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=false);
+  selectionSummary();
+  if($('#minus')) $('#minus').disabled=setup.count<=1;
+  if($('#plus')) $('#plus').disabled=setup.count>=6;
+  if($('#tMinus')) $('#tMinus').disabled=setup.target<=3;
+  if($('#tPlus')) $('#tPlus').disabled=setup.target>=30;
 }
-$("#testAll").onclick = async () => {
+async function testAllSongs(){
   if(testing){ cancelTests(); stopAll(); return; }
   if(!ytReady && !ytFailed && !spConnected()){ toast("YouTube lädt noch – gleich nochmal."); return; }
-  testing = true; const run = ++testRun; stopAll(); listPlaying = null; renderSongs();
-  document.querySelectorAll('#mSongs input, #mSongs textarea, #mSongs button:not(#testAll):not([data-close])').forEach(el=>el.disabled=true);
+  testing = true; const run = ++testRun; stopAll(); listPlaying = null; renderSongSelection();
+  document.querySelectorAll('#dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=true);
   const btn = $("#testAll"); let ok = 0, n = 0; const list = songs.filter(s=>s.a && s.t);
   try {
     for(const s of list){
@@ -2008,8 +1925,7 @@ $("#testAll").onclick = async () => {
     if(run===testRun){ cancelTests(); btn.textContent = `${ok}/${list.length} spielbar · erneut testen`; }
   } catch(e){ if(run===testRun){ cancelTests(); toast("Test abgebrochen. Bitte erneut versuchen."); } }
 };
-$("#addSong").onclick = () => { songs.push({a:"",t:"",y:new Date().getFullYear(),c:0,yt:[]}); saveSongs(); renderSongs(); const rows = $("#songRows").querySelectorAll("tr"); rows[rows.length-1].querySelector("input").focus(); };
-$("#resetSongs").onclick = () => { songs = DEFAULT_SONGS.map(s=>({...s, yt:[...s.yt]})); saveSongs(); renderSongs(); toast("Standardliste wiederhergestellt."); };
+$("#resetSongs").onclick = () => { songs = DEFAULT_SONGS.map(s=>({...s, yt:[...s.yt]})); saveSongs(); renderSongSelection(); toast("Standardliste wiederhergestellt."); };
 $("#exportSongs").onclick = async () => {
   const txt = JSON.stringify(songs.map(({_it,...s})=>s));
   try{ await navigator.clipboard.writeText(txt); toast("Liste kopiert."); }
@@ -2021,7 +1937,7 @@ $("#doImport").onclick = () => {
     const arr = JSON.parse($("#importText").value); if(!Array.isArray(arr)) throw 0;
     const imported = arr.filter(s=>s && s.a && s.t && validYear(s.y)).map(s=>({ a:String(s.a), t:String(s.t), y:+s.y, c:0, enabled:s.enabled!==false, yt:Array.isArray(s.yt)?s.yt.filter(x=>/^[\w-]{11}$/.test(x)):[], u:/^[\w-]{11}$/.test(s.u||"")?s.u:undefined, sp:/^[A-Za-z0-9]{22}$/.test(s.sp||"")?s.sp:undefined }));
     if(!imported.length) throw new Error("empty");
-    songs = imported; saveSongs(); renderSongs(); toast(songs.length + " Songs übernommen.");
+    songs = imported; saveSongs(); renderSongSelection(); toast(songs.length + " Songs übernommen.");
   }catch(e){ toast("Das war kein gültiges Listenformat."); }
 };
 
@@ -2042,14 +1958,13 @@ document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e =
   if(e.target !== m && !e.target.hasAttribute("data-close")) return;
   m.classList.remove("open"); app.inert=false; $(".topbar").inert=false; ytHost.inert=false; renderSongSelection(); document.body.classList.remove("modal-open");
   if(modalReturnFocus && modalReturnFocus.isConnected) modalReturnFocus.focus();
-  if(m.id === "mSongs"){
+  if(m.id === "mSongs" || m.id === "mBackup"){
     cancelTests();
     if(listPlaying){ listPlaying = null; stopAll(); }
     if(game && game.phase!=="finished" && game.current && $("#theCard")){ startSong(game.current, false); renderGame(); }
     else { stopAll(); P.song=null; }
   }
 }));
-$("#btnSongs").onclick = () => { renderSongs(); openM("#mSongs"); };
 $("#btnRules").onclick = () => openM("#mRules");
 $("#btnNew").onclick = renderSetup;
 
