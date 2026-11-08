@@ -967,6 +967,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .topbar .header-actions #btnNew:hover{background:#720010}
 @media(max-width:500px){.topbar #btnRules.header-help{flex-basis:44px;width:44px;height:44px;min-width:44px;min-height:44px;font-size:26px;border-width:2px}.topbar .header-actions{gap:5px;top:7px;right:8px}.topbar .header-actions #btnNew{font-size:12px;padding:7px 10px}}
 
+
+.player-options{display:grid;gap:0;margin:12px 0}.player-option{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}.player-option input{width:20px;height:20px;min-height:20px;accent-color:var(--rot);flex:0 0 20px}.player-option strong{display:block;font-size:15px}.player-option small{display:block;color:var(--mut);font-size:12px;margin-top:3px}.player-alternatives{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}.alternative-buttons{display:flex;flex-wrap:wrap;gap:4px 12px}.alternative-buttons .text-button{font-size:12px}.player-alternatives>.hint{font-size:11px}.answer-prompt{line-height:1.5}
+.celebration{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1100}.celebration i{position:absolute;left:var(--x);top:-24px;width:5px;height:9px;background:var(--color);opacity:0;animation:gentle-rain 1650ms var(--delay) ease-in forwards}.celebration.candy i{width:13px;height:8px;border-radius:3px}.celebration.candy i::before,.celebration.candy i::after{content:"";position:absolute;top:0;border-top:4px solid transparent;border-bottom:4px solid transparent}.celebration.candy i::before{right:100%;border-left:5px solid var(--color)}.celebration.candy i::after{left:100%;border-right:5px solid var(--color)}
+@keyframes gentle-rain{0%{opacity:0;transform:translateY(0) rotate(0)}15%{opacity:.7}75%{opacity:.55}100%{opacity:0;transform:translate(var(--drift),70vh) rotate(var(--spin))}}
+@media(prefers-reduced-motion:reduce){.celebration{display:none}}
 </style>
 </head>
 <body>
@@ -1052,7 +1057,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
   <details class="box" style="margin-top:12px">
     <summary>Liste sichern & wiederherstellen</summary>
     <p class="hint"><span class="tag ok">vorgegeben</span> = Jahr aus der Standardliste, <span class="tag">bitte prüfen</span> = Quellenlage unklar oder widersprüchlich. Änderungen werden in diesem Browser gespeichert.</p>
-    <p class="hint">Musik kommt über Spotify (wenn verbunden), sonst über YouTube – bis zu 90 Sekunden ab Anfang. Klappt ein Video nicht, nimmt das Spiel das nächste, als Notlösung einen 30-Sek.-Ausschnitt von Apple. „Alle Songs testen“ prüft die Wiedergabe vorab. Das kann mehrere Minuten dauern und lässt sich abbrechen. In „Eigener Link“ kannst du einen YouTube- oder Spotify-Link einfügen, der dann zuerst gespielt wird.</p>
+    <p class="hint">Die Playerauswahl legt den Dienst fest. „Alle testen“ prüft YouTube-Wiedergabe bzw. verfügbare Treffer und Vorschaulinks beim gewählten Dienst. Der Test ist abbrechbar. Eigene YouTube- und Spotify-Links gelten beim jeweiligen Player.</p>
     <div class="row" style="flex-wrap:wrap">
       <button class="btn sm ghost" id="resetSongs" style="flex:0 0 auto">Standardliste wiederherstellen</button>
       <button class="btn sm ghost" id="exportSongs" style="flex:0 0 auto">Liste kopieren</button>
@@ -1085,7 +1090,7 @@ const RULES = [
   "<strong>Hören & raten.</strong> Reihum auf einem Gerät spielen. Verdeckten Titel oder Interpreten laut nennen.",
   "<strong>Jahr einordnen.</strong> Auf eine Lücke im Zeitstrahl tippen. Richtig? Karte behalten. Gleiche Jahre dürfen nebeneinander liegen. Es zählt das Erscheinungsjahr.",
   "<strong>Bonuspunkte.</strong> Nach dem Aufdecken jeden richtigen Tipp bestätigen: je <b>1 Punkt + 1 Kamelle</b>, auch bei falschem Jahr. Vorgegebene Angaben zählen nicht.",
-  "<strong>Kamelle einsetzen.</strong> <b>1</b> zum Überspringen, <b>3</b> für eine Karte. Eure Bonuspunkte bleiben erhalten.",
+  "<strong>Kamelle einsetzen.</strong> <b>3 Kamelle</b> überspringen eine Karte. Eure Bonuspunkte bleiben erhalten.",
   "<strong>Ziel erreichen.</strong> Die gewählte Kartenzahl gewinnt. Bei <b>Ohne Zeitstrahl</b> zählt stattdessen das Punkteziel."
 ];
 
@@ -1241,7 +1246,7 @@ let songs = (()=>{
   return saved;
 })();
 store.set("kh_songs_ver", SONG_VER);
-const saveSongs = ()=> store.set("kh_songs_v2", songs.map(({_it,...s})=>s));
+const saveSongs = ()=> store.set("kh_songs_v2", songs.map(({_it,_dz,...s})=>s));
 
 let setup = store.get("kh_setup3");
 if(!setup){
@@ -1251,6 +1256,7 @@ if(!setup){
 setup = { ...setup,
   count: Math.max(1, Math.min(6, Math.round(Number(setup.count)||2))),
   target: Math.max(3, Math.min(30, Math.round(Number(setup.target)||10))),
+  player: ["yt","sp","itunes","deezer"].includes(setup.player)?setup.player:"yt",
   mode: Object.hasOwn(MODES,setup.mode) ? setup.mode : "hoer",
   theme: THEMES[setup.theme] ? setup.theme : "eigene",
   names: Array.isArray(setup.names) ? setup.names.map(n=>String(n).slice(0,22)) : THEMES.koelsch.names.slice()
@@ -1456,20 +1462,71 @@ async function itunesPreview(song){
   song._it = found; return found;
 }
 
+const PLAYERS = {
+  yt:{name:"YouTube",note:"Bis zu 90 Sekunden"},
+  sp:{name:"Spotify",note:"Premium und Verknüpfung erforderlich"},
+  itunes:{name:"Apple Music",note:"(Achtung: beschränkt auf 30 Sekunden!)"},
+  deezer:{name:"Deezer",note:"(Achtung: beschränkt auf 30 Sekunden!)"}
+};
+const isPreview = provider => provider==="itunes" || provider==="deezer";
+async function deezerPreview(song){
+  // Signed preview URLs expire: keep metadata briefly in memory, never in storage.
+  if(song._dz && Date.now()-song._dz.at<240000) return song._dz.value;
+  try{
+    const data=await jsonp("https://api.deezer.com/search?output=jsonp&limit=15&q="+encodeURIComponent(artistFirst(song.a)+" "+song.t));
+    const match=(data.data||[]).filter(r=>r.preview && r.readable!==false).map(r=>({r,sc:matchScore(song,r.artist?.name||"",r.title,r.album?.title||"")})).filter(x=>x.sc>=5).sort((a,b)=>b.sc-a.sc)[0];
+    const r=match?.r;
+    const value=r?{url:r.preview,title:(r.artist?.name||"")+" – "+r.title,link:r.link}:null;
+    if(value) song._dz={at:Date.now(),value};
+    return value;
+  }catch(e){return null;}
+}
+function providerLink(provider,song){
+  const query=encodeURIComponent(song.a+" "+song.t);
+  if(provider==="sp")return song.sp?"https://open.spotify.com/track/"+song.sp:"https://open.spotify.com/search/"+query;
+  if(provider==="itunes")return "https://music.apple.com/de/search?term="+query;
+  if(provider==="deezer")return "https://www.deezer.com/search/"+query;
+  return ytLink(song);
+}
+function renderPlayerSelection(){
+  return `<div class="player-options" role="radiogroup" aria-label="Playerauswahl">${Object.entries(PLAYERS).map(([id,p])=>`<label class="player-option"><input type="radio" name="player" value="${id}" ${setup.player===id?"checked":""}><span><strong>${p.name}</strong><small>${p.note}</small></span></label>`).join("")}</div>
+    ${setup.player==="sp"?renderSpotifyBox():isPreview(setup.player)?`<p class="hint">Vorschau ohne Kontoverknüpfung. Nicht jeder Song ist verfügbar. Vollständige Songs könnt ihr im jeweiligen Dienst öffnen.</p><a class="text-button" href="${setup.player==='itunes'?'https://music.apple.com/':'https://www.deezer.com/'}" target="_blank" rel="noopener">${PLAYERS[setup.player].name} öffnen ↗</a>`:'<p class="hint">Wiedergabe über YouTube. Keine Verknüpfung nötig.</p>'}`;
+}
+function playerAlternatives(song){
+  const active=P.provider||setup.player;
+  return `<div class="player-alternatives"><p class="hint">Andere Wiedergabe</p><div class="alternative-buttons">${Object.entries(PLAYERS).filter(([id])=>id!==active).map(([id,p])=>`<button class="text-button" data-provider="${id}" ${id==='sp'&&!spConnected()?'disabled':''}>${p.name}${isPreview(id)?' (30 Sek.)':''}</button>`).join("")}</div>
+    <a class="hint" href="${esc(providerLink(active,song))}" target="_blank" rel="noopener">In ${PLAYERS[active].name} öffnen ↗</a><p class="hint">Beim Öffnen im Dienst können Titel und Interpret sichtbar sein.</p></div>`;
+}
+function clearCelebrations(){document.querySelectorAll('.celebration').forEach(el=>el.remove());}
+function celebrate(kind){
+  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+  clearCelebrations();
+  const layer=document.createElement('div');layer.className='celebration '+kind;layer.setAttribute('aria-hidden','true');
+  for(let i=0;i<(kind==='candy'?10:18);i++){
+    const bit=document.createElement('i');
+    bit.style.setProperty('--x',(8+Math.random()*84)+'vw');
+    bit.style.setProperty('--drift',(-35+Math.random()*70)+'px');
+    bit.style.setProperty('--delay',(Math.random()*250)+'ms');
+    bit.style.setProperty('--spin',(-140+Math.random()*280)+'deg');
+    bit.style.setProperty('--color',['#c41e38','#f2bf57','#e6a6ad'][i%3]);
+    layer.appendChild(bit);
+  }
+  document.body.appendChild(layer);setTimeout(()=>layer.remove(),2200);
+}
+
 /* =========================================================
-   ABSPIEL-STEUERUNG (Spotify → YouTube → Apple)
+   ABSPIEL-STEUERUNG (ausgewählter Dienst)
    ========================================================= */
 const P = { song:null, cands:[], idx:0, mode:null, state:"idle", autoplay:true, title:"", link:"", tapTimer:null, watch:null, waitingYT:false, waitingSP:false, spUri:"", spStarted:false };
-function candidatesFor(song){
-  const out = [];
-  if(spConnected() && !SP.failed) out.push({type:"sp"});
-  const list = []; if(song.u) list.push(song.u);
-  const ok = ytOk[songKey(song)]; if(ok) list.push(ok);
+function candidatesFor(song, provider=setup.player){
+  if(provider==="sp")return spConnected()&&!SP.failed?[{type:"sp"}]:[];
+  if(isPreview(provider))return [{type:provider}];
+  const list=[];if(song.u)list.push(song.u);
+  const ok=ytOk[songKey(song)];if(ok)list.push(ok);
   (song.yt||[]).forEach(id=>list.push(id));
-  [...new Set(list)].filter(id => !ytBad.has(id) || id===song.u || id===ok).forEach(id=>out.push({type:"yt", id}));
-  out.push({type:"itunes"});
-  return out;
+  return [...new Set(list)].filter(id=>!ytBad.has(id)||id===song.u||id===ok).map(id=>({type:"yt",id}));
 }
+
 const setState = st => { P.state = st; updatePlayerUI(); };
 function stopAll(){
   playbackEpoch++;
@@ -1479,9 +1536,9 @@ function stopAll(){
   try{ audio.pause(); }catch(e){}
   try{ if(SP.player && SP.ready && previousMode==="sp") SP.player.pause().catch(()=>{}); }catch(e){}
 }
-function startSong(song, autoplay){
+function startSong(song, autoplay, provider=setup.player){
   stopAll(); spActivate();
-  Object.assign(P, { song, cands:candidatesFor(song), idx:0, autoplay, title:"", link:"", spUri:"", spStarted:false });
+  Object.assign(P, { song, provider, cands:candidatesFor(song,provider), idx:0, autoplay, title:"", link:"", spUri:"", spStarted:false });
   tryCand();
 }
 function armBlocked(ms){ clearTimeout(P.tapTimer); P.tapTimer = setTimeout(()=>{ if(P.state==="loading") setState("blocked"); }, ms); }
@@ -1516,7 +1573,7 @@ function tryCand(){
     armBlocked(3000);
   } else {
     P.mode = "audio"; setState("loading");
-    itunesPreview(song).then(f=>{
+    (c.type==="deezer"?deezerPreview(song):itunesPreview(song)).then(f=>{
       if(P.song !== song || P.mode !== "audio" || epoch !== playbackEpoch) return;
       if(!f){ P.idx++; return tryCand(); }
       P.title = f.title + " (30-Sek.-Ausschnitt)"; P.link = f.link;
@@ -1563,6 +1620,7 @@ function playAudio(url){
   if(p && p.then) p.then(()=>{ if(epoch===playbackEpoch) setState("playing"); }).catch(()=>{ if(epoch===playbackEpoch) setState("blocked"); }); else setState("playing");
 }
 audio.addEventListener("error", ()=>{ if(P.mode==="audio" && !audio.src.startsWith("data:")){ P.idx++; tryCand(); } });
+audio.addEventListener("timeupdate",()=>{if(P.mode==="audio" && audio.currentTime>=30){audio.pause();setState("ended");}});
 audio.addEventListener("ended", ()=>{ if(P.mode==="audio" && !audio.src.startsWith("data:")) setState("ended"); });
 
 function togglePlay(){
@@ -1598,9 +1656,10 @@ function nextMatch(){
   stopAll(); P.idx++; P.autoplay = true; P.spStarted = false; tryCand();
   const n = P.cands[P.idx];
   if(!n) return;
-  toast(n.type==="yt" ? "Nächstes YouTube-Video" : n.type==="itunes" ? "Notlösung: 30-Sek.-Ausschnitt" : "Spotify");
+  toast(n.type==="yt" ? "Nächstes YouTube-Video" : isPreview(n.type) ? PLAYERS[n.type].name+": 30-Sek.-Ausschnitt" : "Spotify");
 }
-const SRC = { sp:"Spotify", yt:"YouTube", audio:"Apple-Ausschnitt" };
+const SRC = { sp:"Spotify", yt:"YouTube", audio:"Vorschau" };
+const playingSource=()=>P.mode==="audio"?PLAYERS[P.provider]?.name||"Vorschau":SRC[P.mode]||"";
 function updatePlayerUI(){
   const st = P.state, btn = $("#pPlay"), lab = $("#pStatus"), eq = $("#pEq"), card = $("#theCard");
   if(eq) eq.classList.toggle("on", st==="playing");
@@ -1615,9 +1674,9 @@ function updatePlayerUI(){
   }
   if(btn){ btn.setAttribute("aria-label", st==="playing" ? "Pausieren" : "Abspielen"); btn.textContent = st==="playing" ? "❚❚" : "▶︎"; btn.disabled = st==="none"; }
   if(lab){
-    const src = SRC[P.mode] ? " · " + SRC[P.mode] : "";
-    lab.textContent = ({ idle:"", loading:"lädt …", playing:"läuft"+src, paused:"Pause"+src, ended:"vorbei – ▶︎ für nochmal", blocked:"tippen zum Starten", none:"Kein Song gefunden" })[st] || "";
-    if(P.mode==="audio" && st==="playing") lab.textContent = "läuft · nur 30-Sek.-Ausschnitt";
+    const src = playingSource() ? " · " + playingSource() : "";
+    lab.textContent = ({ idle:"", loading:"lädt …", playing:"läuft"+src, paused:"Pause"+src, ended:"vorbei – ▶︎ für nochmal", blocked:"tippen zum Starten", none:P.provider==="sp"&&!spConnected()?"Spotify zuerst unter Playerauswahl verbinden":"Keine Wiedergabe verfügbar – Alternative unter Kamelle eintauschen" })[st] || "";
+    if(P.mode==="audio" && st==="playing") lab.textContent = "läuft · "+playingSource()+" (max. 30 Sekunden)";
   }
   
 }
@@ -1638,12 +1697,11 @@ function namesFor(theme, n){ const base = (THEMES[theme]||{}).names || []; retur
 function renderSetupIfOpen(){ if(!game && $("#setupRoot")) renderSetup(); }
 function renderSetup(){
   if(testing) cancelTests();
-  listPlaying=null; stopAll(); P.song = null; P.mode = null; game = null;
+  clearCelebrations();listPlaying=null; stopAll(); P.song = null; P.mode = null; game = null;
   $("#btnNew").style.display = "none";
   while(setup.names.length < setup.count) setup.names.push(namesFor(setup.theme, setup.count)[setup.names.length]);
   const n = setup.count;
   const valid = songs.filter(s=>s.enabled!==false && s.a && s.t && validYear(s.y)).length;
-  const spState = !SP.clientId ? "aus" : spConnected() ? (SP.failed ? "Problem" : SP.ready ? "verbunden" : "verbunden") : "nicht verbunden";
   app.innerHTML = `
   <div class="setup" id="setupRoot">
     <div class="stack">
@@ -1661,8 +1719,8 @@ function renderSetup(){
         <label class="l" style="margin-top:12px">${isDuel()?"Punkte":"Karten"} zum Sieg</label>
         <div class="stepper"><button id="tMinus" aria-label="Weniger ${isDuel()?'Punkte':'Karten'}" ${setup.target<=3?"disabled":""}>−</button><b>${setup.target}</b><button id="tPlus" aria-label="Mehr ${isDuel()?'Punkte':'Karten'}" ${setup.target>=30?"disabled":""}>+</button><span class="hint" style="margin-left:auto">${valid} Songs im Stapel</span></div>
       </details>
-      <details class="box" id="dMusic" ${setupOpen.music?"open":""}><summary>Musik <small>${SP.clientId ? "Spotify: "+spState : "YouTube"}</small></summary>
-        ${renderSpotifyBox()}
+      <details class="box" id="dMusic" ${setupOpen.music?"open":""}><summary>Playerauswahl <small>${PLAYERS[setup.player].name}</small></summary>
+        ${renderPlayerSelection()}
       </details>
       <details class="box" id="dSelection" ${setupOpen.songs?"open":""}>
         <summary>Songauswahl <small id="selectionCount"></small></summary>
@@ -1687,6 +1745,7 @@ function renderSetup(){
   $("#start").onclick = startGame;
   if($("#donate")) $("#donate").onclick = donate;
   bindSpotifyBox();
+  app.querySelectorAll('input[name="player"]').forEach(input=>input.onchange=()=>{setup.player=input.value;saveSetup();renderSetup();});
   bindSongSelection();
   placeYT();
 }
@@ -1743,7 +1802,7 @@ $("#songEditor").onsubmit=e=>{
   if(!a||!t||!validYear(y)){toast("Bitte Interpret, Titel und gültiges Jahr eintragen.");return;}
   if(link.bad){toast("Bitte einen YouTube- oder Spotify-Link eintragen.");return;}
   if(songs.some(s=>s!==editingSong&&songKey(s)===songKey({a,t}))){toast("Dieser Song ist bereits in der Liste.");return;}
-  if(editingSong){const oldKey=songKey(editingSong);delete spCache[oldKey];delete testStatus[oldKey];delete editingSong._it;Object.assign(editingSong,{a,t,y,c:editingSong.y===y?editingSong.c:0,u:undefined,sp:undefined,...link});}
+  if(editingSong){const oldKey=songKey(editingSong);delete spCache[oldKey];delete testStatus[oldKey];delete editingSong._it;delete editingSong._dz;Object.assign(editingSong,{a,t,y,c:editingSong.y===y?editingSong.c:0,u:undefined,sp:undefined,...link});}
   else songs.push({a,t,y,c:0,enabled:true,yt:[],...link});
   saveSongs();$("#mSongs [data-close]").click();
 };
@@ -1752,12 +1811,12 @@ $("#deleteSong").onclick=()=>{if(editingSong){songs.splice(songs.indexOf(editing
 function renderSpotifyBox(){
   const uri = redirectUri();
   if(spConnected()){
-    const st = SP.failed ? `⚠︎ ${esc(SP.err||"Problem")} – es läuft YouTube.` : SP.ready ? "✓ bereit" : "lädt beim ersten Song …";
+    const st = SP.failed ? `⚠︎ ${esc(SP.err||"Problem")}` : SP.ready ? "✓ bereit" : "lädt beim ersten Song …";
     return `<p style="margin:0 0 10px"><b>Spotify verbunden</b>${SP.user?` als ${esc(SP.user)}`:""}. <span class="mut">${st}</span></p>
-      <p class="hint">Songs laufen über Spotify, ab Anfang, 90 Sekunden. Wird ein Song dort nicht gefunden, springt YouTube ein.</p>
+      <p class="hint">Songs laufen über Spotify, ab Anfang, 90 Sekunden. Alternativen findet ihr im Spiel unter „Kamelle eintauschen“.</p>
       <button class="btn sm ghost" id="spOut">Spotify trennen</button>`;
   }
-  return `<p class="hint" style="margin-top:0">Standard ist YouTube. Mit <b>Spotify Premium</b> könnt ihr stattdessen über Spotify hören – einmalig einrichten:</p>
+  return `<p class="hint" style="margin-top:0">Mit <b>Spotify Premium</b> könnt ihr direkt hier hören. Einmalig verknüpfen:</p>
     <details><summary class="hint" style="cursor:pointer"><b>Spotify einrichten</b></summary>
       <ol class="steps">
         <li>Auf <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> mit deinem Spotify-Konto anmelden → <b>Create app</b>.</li>
@@ -1793,6 +1852,7 @@ function startGame(){
   draw();
 }
 function draw(){
+  clearCelebrations();
   if(!game.deck.length) return endGame(true);
   if(setup.mode==="mix" && !game.modeBag.length) game.modeBag=shuffle(["hoer","artist","title"]);
   game.roundMode=setup.mode==="mix"?game.modeBag.pop():setup.mode;
@@ -1836,7 +1896,6 @@ function renderGame(){
     else if(i===g.lastSlot && !g.lastOk) tl+='<div class="slot miss">✕</div>';
     if(i<Pl.cards.length){const c=Pl.cards[i];tl+=`<div class="tcard ${c===g.newCard?"new":""}"><div class="y">${c.y}</div><div class="t">${esc(c.t)}</div><div class="a">${esc(c.a)}</div></div>`;}
   }
-  const others=g.players.map((p,i)=>i===g.turn?"":`<div class="item" style="display:block"><b>${esc(p.name)}</b><span class="mut"> · ${progressOf(p)} ${duel?"Punkte":"Karten"}${bonusEnabled?` · ${p.kamelle} Kamelle`:""}</span>${duel?"":`<div class="mini">${p.cards.map(c=>`<span><b>${c.y}</b> ${esc(c.t)}</span>`).join("")}</div>`}</div>`).join("");
   app.innerHTML=`
     <div class="teams">${g.players.map((p,i)=>`<div class="tchip ${i===g.turn?"on":""}">${esc(p.name)} <span>${progressOf(p)}/${setup.target}${duel?" Pkt.":bonusEnabled?` · ${p.kamelle} 🍬`:""}</span></div>`).join("")}</div>
     <div class="turn-heading"><h2>${esc(Pl.name)} ist dran</h2><span>${mode.label}</span></div>
@@ -1848,19 +1907,20 @@ function renderGame(){
         ${below}
       </div>
       <div>
-        ${duel?`${g.phase==="place"?'<p class="answer-prompt">Interpret und Titel laut nennen. Dann gemeinsam auflösen.</p><button class="btn big" id="reveal">Aufdecken</button>':""}<div class="duel-board">${g.players.map(p=>`<div class="duel-score"><span>${esc(p.name)}</span><b>${p.bonusTotal} Punkte</b></div>`).join("")}</div>`:`${g.phase==="place"?`<p class="answer-prompt">${mode.fields.length?mode.fields.map(k=>FIELD_NAMES[k]).join(" und ")+" laut nennen. Dann das Jahr einordnen.":"Wo gehört der Song hin?"}</p>`:""}<p class="timeline-hint">Dein Zeitstrahl <span>← wischen →</span></p><div class="timeline" tabindex="0" aria-label="Zeitstrahl, seitlich scrollbar">${tl}</div>`}
-        <details class="box more" style="margin-top:14px"><summary>Mehr <small>${bonusEnabled?`${Pl.kamelle} 🍬 · `:""}${g.deck.length} im Stapel</small></summary>
-          ${bonusEnabled?`<p class="hint">${Pl.bonusTotal} Bonuspunkte gesammelt · ${Pl.kamelle} Kamelle verfügbar</p><div class="item"><span>Song überspringen <span class="mut">(1 🍬)</span></span><button class="btn sm ghost" id="skip" ${Pl.kamelle<1||g.phase!=="place"?"disabled":""}>Überspringen</button></div>${duel?"":`<div class="item"><span>Karte kaufen <span class="mut">(3 🍬)</span></span><button class="btn sm ghost" id="trade" ${Pl.kamelle<3||g.phase!=="place"?"disabled":""}>Eintauschen</button></div>`}`:""}
-          <div class="item"><span>Song läuft nicht?</span><a class="btn sm ghost" href="${ytLink(s)}" target="_blank" rel="noopener" style="text-decoration:none">YouTube-Suche</a></div>
-          ${g.phase==="result" && P.title?`<p class="hint">Gespielt: ${esc(P.title)}${P.link?` · <a href="${esc(P.link)}" target="_blank" rel="noopener">öffnen</a>`:""}</p>`:""}${others}
+        ${duel?`${g.phase==="place"?'<p class="answer-prompt">Interpret und Titel laut nennen. Dann gemeinsam auflösen.</p><button class="btn big" id="reveal">Aufdecken</button>':""}<div class="duel-board">${g.players.map(p=>`<div class="duel-score"><span>${esc(p.name)}</span><b>${p.bonusTotal} Punkte</b></div>`).join("")}</div>`:`${g.phase==="place"?`<p class="answer-prompt">${mode.fields.length?(mode.fields.length===2?"Titel und Interpret":mode.fields.map(k=>FIELD_NAMES[k]).join(" und "))+" nennen – dann<br>in den Jahresstrahl einordnen.<br>Lösung (und Kamelle) gibt’s dann!":"In den Jahresstrahl einordnen.<br>Die Lösung gibt’s dann!"}</p>`:""}<div class="timeline" tabindex="0" aria-label="Zeitstrahl, seitlich scrollbar">${tl}</div>`}
+        <details class="box more" style="margin-top:14px"><summary>Kamelle eintauschen <small>${bonusEnabled?`${Pl.kamelle} 🍬 · `:""}${g.deck.length} im Stapel</small></summary>
+          ${bonusEnabled?`<div class="item"><span>Karte überspringen <span class="mut">(3 🍬)</span></span><button class="btn sm ghost" id="skip" ${Pl.kamelle<3||g.phase!=="place"||!g.deck.length?"disabled":""}>Eintauschen</button></div>`:'<p class="hint">In „Nur das Jahr“ gibt es keine Kamelle.</p>'}
+          ${playerAlternatives(s)}
+          ${g.phase==="result" && P.title?`<p class="hint">Gespielt: ${esc(P.title)}${P.link?` · <a href="${esc(P.link)}" target="_blank" rel="noopener">öffnen</a>`:""}</p>`:""}
         </details>
       </div>
     </div>`;
   app.querySelectorAll(".slot[data-i]").forEach(b=>b.onclick=()=>place(+b.dataset.i));
   app.querySelectorAll("[data-bonus]").forEach(b=>b.onclick=()=>setBonus(b.dataset.bonus,b.dataset.correct==="yes"));
   const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn;};
-  on("#skip",skipSong);on("#trade",tradeCard);on("#next",nextTurn);on("#reveal",revealDuel);
+  on("#skip",skipSong);on("#next",nextTurn);on("#reveal",revealDuel);
   on("#noMoreBonus",()=>{if(!game || game.phase!=="result")return;roundMode().fields.forEach(k=>{if(game.bonus[k]===undefined)game.bonus[k]=false;});renderGame();$("#next").focus({preventScroll:true});});
+  app.querySelectorAll("[data-provider]").forEach(b=>b.onclick=()=>{unlockAudio();startSong(g.current,true,b.dataset.provider);renderGame();});
   on("#pPlay",togglePlay);on("#pRestart",restart);on("#pNext",nextMatch);
   on("#theCard",()=>{if(P.state==="blocked" && P.mode!=="yt")togglePlay();});
   updatePlayerUI();placeYT();requestAnimationFrame(placeYT);
@@ -1869,7 +1929,7 @@ function setBonus(field,correct){
   if(!game || game.phase!=="result" || !roundMode().fields.includes(field) || typeof correct!=="boolean")return;
   const Pl=game.players[game.turn],previous=game.bonus[field]===true?1:0,delta=(correct?1:0)-previous;
   game.bonus[field]=correct;Pl.kamelle+=delta;Pl.bonusTotal+=delta;
-  renderGame();
+  renderGame();if(delta>0)celebrate("candy");
   const choice=app.querySelector(`[data-bonus="${field}"][data-correct="${correct?"yes":"no"}"]`);if(choice)choice.focus({preventScroll:true});
 }
 function revealDuel(){
@@ -1882,20 +1942,12 @@ function place(i){
   const ok=(i===0 || c[i-1].y<=y)&&(i===c.length || c[i].y>=y);
   Object.assign(g,{lastSlot:i,lastOk:ok,phase:"result",newCard:null});
   if(ok){c.splice(i,0,g.current);g.newCard=g.current;}
-  renderGame();
+  renderGame();if(ok)celebrate("confetti");
 }
 function skipSong(){
-  if(!game || game.phase!=="place")return;
-  const Pl=game.players[game.turn];if(Pl.kamelle<1)return;
-  Pl.kamelle--;game.deck.unshift(game.current);draw();toast("Übersprungen.");
-}
-function tradeCard(){
-  if(!game || isDuel() || setup.mode==="quiz" || game.phase!=="place")return;
-  const g=game,Pl=g.players[g.turn];if(Pl.kamelle<3 || !g.deck.length)return;
-  Pl.kamelle-=3;const free=g.deck.shift();Pl.cards.push(free);Pl.cards.sort((a,b)=>a.y-b.y);g.newCard=free;
-  toast(`Gekauft: ${free.t} (${free.y})`);
-  if(progressOf(Pl)>=setup.target)return endGame(false,Pl);
-  renderGame();
+  if(!game || game.phase!=="place" || setup.mode==="quiz" || !game.deck.length)return;
+  const Pl=game.players[game.turn];if(Pl.kamelle<3)return;
+  Pl.kamelle-=3;game.deck.unshift(game.current);draw();toast("Karte übersprungen · 3 Kamelle eingelöst.");
 }
 function nextTurn(){
   if(!game || game.phase!=="result" || !bonusComplete())return;
@@ -1931,7 +1983,7 @@ function setStatus(s, html){
 function watchListTitle(s){
   let n = 0; const iv = setInterval(()=>{
     n++; if(P.song !== s || n > 40){ clearInterval(iv); return; }
-    if(P.state === "playing"){ setStatus(s, "✓ " + esc((SRC[P.mode]||"")+": "+(P.title||"läuft"))); clearInterval(iv); }
+    if(P.state === "playing"){ setStatus(s, "✓ " + esc(playingSource()+": "+(P.title||"läuft"))); clearInterval(iv); }
     else if(P.state === "none"){ setStatus(s, "✗ nichts gefunden"); clearInterval(iv); }
     else if(P.state === "blocked"){ setStatus(s, "im Spiel einmal antippen"); clearInterval(iv); }
   }, 300);
@@ -1946,36 +1998,34 @@ function ytTestId(id){
   });
 }
 async function testSong(s, run){
-  const current = ()=>run===testRun;
-  if(spConnected() && !SP.failed){
-    try{ const tr = await spFindTrack(s); if(!current()) return false; if(tr){ setStatus(s, "✓ Spotify: " + esc(tr.title)); return true; } }catch(e){}
+  const current=()=>run===testRun,provider=setup.player;
+  if(provider==="sp"){
+    if(!spConnected()){setStatus(s,"Spotify zuerst verbinden");return false;}
+    try{const track=await spFindTrack(s);if(!current())return false;setStatus(s,track?"✓ Spotify: Treffer gefunden":"✗ Kein Spotify-Treffer");return !!track;}catch(e){if(current())setStatus(s,"✗ Spotify nicht erreichbar");return false;}
   }
-  if(!current()) return false;
-  if(ytReady){
-    const cands = candidatesFor(s).filter(c=>c.type==="yt"); let unclear = false;
-    for(let k=0;k<cands.length;k++){
-      if(!current()) return false;
-      setStatus(s, `teste Video ${k+1}/${cands.length} …`);
-      const r = await ytTestId(cands[k].id);
-      if(!current()) return false;
-      if(r.ok){ ytOk[songKey(s)] = cands[k].id; saveYt(); setStatus(s, "✓ YouTube: " + esc(r.title||"läuft")); return true; }
-      if(r.ok === false){ ytBad.add(cands[k].id); saveYt(); } else unclear = true;
-    }
-    if(unclear){ setStatus(s, "? keine Antwort – später nochmal"); return false; }
+  if(isPreview(provider)){
+    const result=await (provider==="deezer"?deezerPreview(s):itunesPreview(s));
+    if(!current())return false;
+    setStatus(s,result?"✓ "+PLAYERS[provider].name+": Vorschau gefunden (max. 30 Sek.)":"✗ Keine Vorschau gefunden");return !!result;
   }
-  if(!current()) return false;
-  const f = await itunesPreview(s);
-  if(!current()) return false;
-  setStatus(s, f ? "⚠︎ nur 30-Sek.-Ausschnitt" : "✗ nichts gefunden – eigenen Link eintragen");
-  return !!f;
+  if(!ytReady){setStatus(s,"? YouTube nicht bereit");return false;}
+  const cands=candidatesFor(s,"yt");let unclear=false;
+  for(let k=0;k<cands.length;k++){
+    if(!current())return false;setStatus(s,`teste Video ${k+1}/${cands.length} …`);
+    const r=await ytTestId(cands[k].id);if(!current())return false;
+    if(r.ok){ytOk[songKey(s)]=cands[k].id;saveYt();setStatus(s,"✓ YouTube: "+esc(r.title||"läuft"));return true;}
+    if(r.ok===false){ytBad.add(cands[k].id);saveYt();}else unclear=true;
+  }
+  setStatus(s,unclear?"? Keine Antwort – später nochmal":"✗ Kein abspielbares Video gefunden");return false;
 }
+
 let testing = false, testRun = 0;
 function cancelTests(){
   testRun++; testing = false;
   if(testHook && testHook.cancel) testHook.cancel();
   try{ ytPlayer && ytPlayer.unMute(); }catch(e){}
   if($("#testAll")) $("#testAll").textContent = "Alle testen";
-  document.querySelectorAll('#dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=false);
+  document.querySelectorAll('#dMusic input, #dMusic button, #dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=false);
   selectionSummary();
   if($('#minus')) $('#minus').disabled=setup.count<=1;
   if($('#plus')) $('#plus').disabled=setup.count>=6;
@@ -1984,9 +2034,9 @@ function cancelTests(){
 }
 async function testAllSongs(){
   if(testing){ cancelTests(); stopAll(); return; }
-  if(!ytReady && !ytFailed && !spConnected()){ toast("YouTube lädt noch – gleich nochmal."); return; }
+  if(setup.player==="yt" && !ytReady && !ytFailed){ toast("YouTube lädt noch – gleich nochmal."); return; }
   testing = true; const run = ++testRun; stopAll(); listPlaying = null; renderSongSelection();
-  document.querySelectorAll('#dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=true);
+  document.querySelectorAll('#dMusic input, #dMusic button, #dSelection input, #dSelection button:not(#testAll), #setupRoot #start, #setupRoot #minus, #setupRoot #plus, #setupRoot [data-th], #setupRoot [data-m], #setupRoot #tMinus, #setupRoot #tPlus').forEach(el=>el.disabled=true);
   const btn = $("#testAll"); let ok = 0, n = 0; const list = songs.filter(s=>s.a && s.t);
   try {
     for(const s of list){
@@ -1999,7 +2049,7 @@ async function testAllSongs(){
 };
 $("#resetSongs").onclick = () => { songs = DEFAULT_SONGS.map(s=>({...s, yt:[...s.yt]})); saveSongs(); renderSongSelection(); toast("Standardliste wiederhergestellt."); };
 $("#exportSongs").onclick = async () => {
-  const txt = JSON.stringify(songs.map(({_it,...s})=>s));
+  const txt = JSON.stringify(songs.map(({_it,_dz,...s})=>s));
   try{ await navigator.clipboard.writeText(txt); toast("Liste kopiert."); }
   catch(e){ $("#importBox").style.display = "block"; $("#importText").value = txt; $("#importText").select(); toast("Bitte manuell kopieren."); }
 };
