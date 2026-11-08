@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trömmelche</title>
+<meta name="theme-color" content="#bd182a">
+<meta name="description" content="Welche Session war dat noch ens? Kölsche Songs hören und gemeinsam auf dem Zeitstrahl einordnen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rot:#bd182a;
+  --rot-d:#961325;
+  --paper:#faf9f6;
+  --ink:#251d1e;
+  --mut:#72666a;
+  --line:#ded8d7;
+  --tint:#f2ece9;
+  --card:#fff;
+  --ok:#247448;
+  --gold:#b88714;
+  --r:12px;
+  --dsp:"Anton","Arial Narrow",Impact,sans-serif
+}
+*{
+  box-sizing:border-box
+}
+html,body{
+  margin:0
+}
+html{
+  scroll-padding-top:16px
+}
+body{
+  font-family:"Bricolage Grotesque",system-ui,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  min-height:100svh
+}
+body.modal-open{
+  overflow:hidden
+}
+button,input,textarea{
+  font:inherit
+}
+button{
+  color:inherit;
+  cursor:pointer;
+  touch-action:manipulation
+}
+button:disabled{
+  opacity:.4;
+  cursor:not-allowed
+}
+a{
+  color:inherit
+}
+button,a,input,textarea,summary{
+  -webkit-tap-highlight-color:transparent
+}
+:focus-visible{
+  outline:3px solid var(--rot);
+  outline-offset:3px
+}
+#app:focus{
+  outline:none
+}
+button{
+  min-height:44px
+}
+input,textarea{
+  font-size:16px;
+  min-width:0
+}
+p{
+  line-height:1.45
+}
+.topbar{
+  border-top:4px solid var(--rot);
+  background:var(--paper)
+}
+header{
+  max-width:900px;
+  margin:auto;
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid var(--line)
+}
+.logo{
+  font-family:var(--dsp);
+  font-size:28px;
+  font-weight:400;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  color:var(--rot)
+}
+.mark{
+  display:none
+}
+.nav{
+  display:flex;
+  gap:2px
+}
+.ib{
+  border:0;
+  background:none;
+  padding:8px 10px;
+  font-size:14px;
+  font-weight:600;
+  border-radius:6px
+}
+.ib:hover{
+  background:var(--tint)
+}
+main{
+  max-width:900px;
+  margin:auto;
+  padding:16px 18px max(24px,env(safe-area-inset-bottom))
+}
+.setup{
+  max-width:480px;
+  margin:auto
+}
+.hero{
+  padding:10px 0 24px
+}
+.hero .claim{
+  font-size:22px;
+  line-height:1.2;
+  letter-spacing:-.04em;
+  font-weight:750;
+  margin:0;
+  max-width:340px
+}
+.hero .sub{
+  margin:8px 0 0;
+  color:var(--mut);
+  font-size:13px
+}
+.stack>*+*{
+  margin-top:10px
+}
+.box{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  padding:16px
+}
+.btn{
+  border:1px solid transparent;
+  border-radius:8px;
+  padding:10px 16px;
+  font-weight:650;
+  background:var(--rot);
+  color:white;
+  line-height:1.25
+}
+.btn:active{
+  transform:translateY(1px)
+}
+.btn.ghost{
+  background:transparent;
+  border-color:var(--line);
+  color:var(--ink)
+}
+.btn.sm{
+  padding:8px 12px;
+  font-size:13px
+}
+.btn.big{
+  width:100%;
+  font-size:19px;
+  min-height:52px
+}
+.mut,.hint{
+  color:var(--mut)
+}
+.hint{
+  font-size:13px;
+  line-height:1.5
+}
+.l{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:var(--mut);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  margin-bottom:10px
+}
+input[type=text],input[type=number],textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:6px;
+  padding:10px;
+  min-height:44px
+}
+input:focus,textarea:focus{
+  border-color:var(--rot)
+}
+.stepper{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+.stepper>button{
+  width:44px;
+  border:1px solid var(--line);
+  background:white;
+  border-radius:6px;
+  font-size:24px;
+  line-height:1
+}
+.stepper b{
+  min-width:30px;
+  text-align:center;
+  font-size:26px;
+  font-weight:650;
+  font-variant-numeric:tabular-nums
+}
+.chips{
+  display:flex;
+  gap:4px;
+  flex-wrap:wrap
+}
+.chip{
+  border:0;
+  background:none;
+  padding:8px 10px;
+  border-radius:6px;
+  font-size:13px;
+  color:var(--mut)
+}
+.chip.on{
+  background:var(--tint);
+  color:var(--rot);
+  font-weight:700
+}
+.names{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+.names input{
+  padding:10px;
+  font-size:16px
+}
+details.box>summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:28px;
+  font-size:14px;
+  font-weight:650
+}
+details.box>summary::-webkit-details-marker{
+  display:none
+}
+details.box>summary::after{
+  content:"+";
+  font-size:20px;
+  font-weight:400;
+  margin-left:4px;
+  color:var(--mut)
+}
+details.box[open]>summary::after{
+  content:"−"
+}
+details.box>summary small{
+  margin-left:auto;
+  text-align:right;
+  font-weight:400;
+  font-size:12px;
+  color:var(--mut)
+}
+details.box[open]>summary{
+  margin-bottom:16px
+}
+.seg{
+  display:flex;
+  gap:4px;
+  background:var(--tint);
+  padding:4px;
+  border-radius:8px
+}
+.seg button{
+  flex:1;
+  border:0;
+  border-radius:5px;
+  padding:8px;
+  background:transparent;
+  font-size:14px;
+  color:var(--mut)
+}
+.seg button.on{
+  background:white;
+  color:var(--ink);
+  font-weight:700
+}
+.foot{
+  margin-top:24px;
+  text-align:center;
+  padding:12px 0;
+  border-top:1px solid var(--line)
+}
+.row{
+  display:flex;
+  gap:8px
+}
+.row>*{
+  flex:1;
+  min-width:0
+}
+.spotify-connect{
+  flex-direction:column
+}
+.teams{
+  display:flex;
+  overflow-x:auto;
+  gap:6px;
+  padding-bottom:8px;
+  margin-bottom:12px;
+  scrollbar-width:thin
+}
+.tchip{
+  flex:0 0 auto;
+  display:flex;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  font-size:13px;
+  font-weight:650
+}
+.tchip span{
+  color:var(--mut);
+  font-variant-numeric:tabular-nums
+}
+.tchip.on{
+  background:var(--rot);
+  border-color:var(--rot);
+  color:white
+}
+.tchip.on span{
+  color:white
+}
+.stage{
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  gap:24px;
+  align-items:start
+}
+.stage>div{
+  min-width:0
+}
+.cardcol{
+  width:100%;
+  min-width:0
+}
+.cardwrap{
+  position:relative;
+  z-index:2
+}
+.card{
+  width:100%;
+  min-height:204px;
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:18px
+}
+.card.mystery{
+  background:var(--rot);
+  color:white
+}
+.card.mystery .q{
+  font-family:var(--dsp);
+  font-size:100px;
+  font-weight:400;
+  line-height:1
+}
+.card.shown{
+  background:white;
+  border:1px solid var(--line)
+}
+.card .artist{
+  font-size:13px;
+  color:var(--mut)
+}
+.card .title{
+  font-size:21px;
+  font-weight:750;
+  line-height:1.15;
+  letter-spacing:-.025em;
+  margin:5px 0 9px;
+  overflow-wrap:anywhere
+}
+.card .year{
+  font-family:var(--dsp);
+  font-size:62px;
+  line-height:1;
+  color:var(--rot);
+  font-weight:400
+}
+.card .flag{
+  margin-top:8px;
+  font-size:11px;
+  color:var(--mut)
+}
+.card.ok{
+  border-color:var(--ok)
+}
+.card.bad{
+  border-color:var(--rot)
+}
+.card.tap{
+  pointer-events:none
+}
+.tapnote{
+  position:absolute;
+  bottom:12px;
+  left:12px;
+  right:12px;
+  background:white;
+  color:var(--ink);
+  border-radius:6px;
+  padding:9px;
+  font-size:13px
+}
+.eq{
+  display:flex;
+  gap:4px;
+  align-items:center;
+  height:18px;
+  margin-top:12px
+}
+.eq i{
+  height:4px;
+  width:3px;
+  background:currentColor;
+  border-radius:2px
+}
+.eq.on i{
+  animation:eq .9s ease-in-out infinite
+}
+.eq.on i:nth-child(2){
+  animation-delay:.15s
+}
+.eq.on i:nth-child(3){
+  animation-delay:.3s
+}
+.eq.on i:nth-child(4){
+  animation-delay:.45s
+}
+.eq.on i:nth-child(5){
+  animation-delay:.6s
+}
+@keyframes eq{
+  50%{
+    height:18px
+  }
+}
+.controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  margin-top:12px
+}
+.play{
+  width:52px;
+  height:52px;
+  border:0;
+  border-radius:50%;
+  background:var(--rot);
+  color:white;
+  font-size:20px
+}
+.cbtn{
+  width:44px;
+  height:44px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:transparent;
+  font-size:20px
+}
+.status{
+  text-align:center;
+  min-height:18px;
+  margin-top:6px;
+  font-size:12px;
+  color:var(--mut)
+}
+.found{
+  text-align:center;
+  overflow-wrap:anywhere;
+  font-size:12px;
+  color:var(--mut);
+  margin-top:10px
+}
+.verdict{
+  font-size:23px;
+  font-weight:750;
+  letter-spacing:-.03em;
+  text-align:center;
+  margin:14px 0 10px
+}
+.tl-head{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:4px 12px
+}
+.tl-head h2{
+  font-size:19px;
+  font-weight:750;
+  letter-spacing:-.03em;
+  margin:0;
+  overflow-wrap:anywhere
+}
+.timeline-hint{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:11px;
+  color:var(--mut);
+  margin:12px 0 6px
+}
+.timeline{
+  display:flex;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  align-items:stretch;
+  gap:4px;
+  padding:5px 2px 12px;
+  scrollbar-width:thin;
+  overscroll-behavior-x:contain
+}
+.tcard{
+  flex:0 0 104px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:10px 8px;
+  text-align:center;
+  overflow-wrap:anywhere
+}
+.tcard .y{
+  font-family:var(--dsp);
+  font-size:30px;
+  line-height:1.1;
+  color:var(--rot)
+}
+.tcard .t{
+  font-size:12px;
+  font-weight:700;
+  line-height:1.2;
+  margin-top:4px
+}
+.tcard .a{
+  font-size:11px;
+  line-height:1.25;
+  color:var(--mut);
+  margin-top:5px
+}
+.tcard.new{
+  border-color:var(--ok)
+}
+.slot{
+  flex:0 0 44px;
+  width:44px;
+  min-height:100px;
+  border:1px dashed #b5a7aa;
+  border-radius:8px;
+  background:transparent;
+  color:var(--rot);
+  font-size:24px;
+  font-weight:400;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+.slot:hover,.slot:focus-visible{
+  background:var(--tint)
+}
+.slot.miss{
+  background:var(--rot);
+  border:0;
+  color:white
+}
+.mini{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:6px
+}
+.mini span{
+  border:1px solid var(--line);
+  padding:4px 6px;
+  border-radius:4px;
+  font-size:12px
+}
+.mini b{
+  color:var(--rot)
+}
+.more .item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+  font-size:13px
+}
+.more .item:first-of-type{
+  border-top:0
+}
+.more .item .btn{
+  flex-shrink:0
+}
+.end{
+  text-align:center;
+  padding:36px 0
+}
+.end .big{
+  font-family:var(--dsp);
+  font-size:clamp(40px,10vw,72px);
+  color:var(--rot);
+  overflow-wrap:anywhere;
+  line-height:1.1;
+  margin:10px 0
+}
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:flex-start;
+  justify-content:center;
+  background:#251d1e88;
+  z-index:20;
+  padding:24px 16px;
+  overflow:auto;
+  overscroll-behavior:contain
+}
+.modal.open{
+  display:flex
+}
+.modal>.box{
+  max-width:880px;
+  width:100%;
+  min-width:0
+}
+.mhead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px
+}
+.mhead h2{
+  font-size:22px;
+  letter-spacing:-.04em;
+  margin:0
+}
+.modal .row{
+  flex-wrap:wrap
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px
+}
+th{
+  text-align:left;
+  font-size:11px;
+  color:var(--mut);
+  padding:8px 4px
+}
+td{
+  padding:5px 4px;
+  border-top:1px solid var(--line)
+}
+td input[type=text]{
+  min-width:150px
+}
+td input[type=number]{
+  width:90px
+}
+td input.lnk{
+  width:160px
+}
+.tag{
+  font-size:10px;
+  padding:4px 6px;
+  border-radius:4px;
+  background:#f4e7cb;
+  white-space:nowrap
+}
+.tag.ok{
+  background:#e5eee7
+}
+.st{
+  font-size:11px;
+  color:var(--mut)
+}
+ol.rules{
+  padding-left:20px;
+  margin:0;
+  font-size:15px;
+  line-height:1.55
+}
+ol.rules li+li{
+  margin-top:12px
+}
+.steps{
+  padding-left:20px;
+  font-size:14px;
+  line-height:1.5
+}
+.steps li+li{
+  margin-top:8px
+}
+code.uri{
+  display:block;
+  background:var(--tint);
+  padding:8px;
+  font-size:12px;
+  overflow-wrap:anywhere;
+  margin:8px 0
+}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:max(20px,env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+  background:var(--ink);
+  color:white;
+  padding:12px 16px;
+  border-radius:8px;
+  display:none;
+  z-index:40;
+  font-size:14px;
+  width:max-content;
+  max-width:calc(100vw - 32px);
+  text-align:center
+}
+#ytHost{
+  position:absolute;
+  left:-9999px;
+  top:0;
+  width:320px;
+  height:320px;
+  z-index:1;
+  border-radius:12px;
+  overflow:hidden;
+  background:#000
+}
+#ytHost iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block
+}
+@media(max-width:700px){
+  .stage{
+    grid-template-columns:minmax(0,1fr);
+    gap:18px
+  }
+  .cardcol{
+    max-width:460px;
+    margin:auto
+  }
+  .card{
+    min-height:204px
+  }
+  .modal{
+    padding:12px 8px max(12px,env(safe-area-inset-bottom))
+  }
+  .modal>.box{
+    padding:14px
+  }
+  .teams{
+    margin-bottom:8px
+  }
+  .more{
+    margin-top:12px!important
+  }
+}
+@media(max-width:380px){
+  header{
+    padding:8px 12px
+  }
+  .logo{
+    font-size:25px
+  }
+  .ib{
+    padding:8px
+  }
+  .nav{
+    gap:0
+  }
+  main{
+    padding:12px 12px 24px
+  }
+  .hero .claim{
+    font-size:21px
+  }
+  .box{
+    padding:12px
+  }
+  .chip{
+    padding:8px
+  }
+  .tcard{
+    flex-basis:96px
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important
+  }
+}
+@media(max-width:600px){
+  #mSongs table,#mSongs tbody{
+    display:block;
+    width:100%
+  }
+  #mSongs thead{
+    display:none
+  }
+  #songRows tr{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 100px;
+    gap:8px;
+    position:relative;
+    border-top:1px solid var(--line);
+    padding:16px 0
+  }
+  #songRows td{
+    display:block;
+    padding:0;
+    border:0;
+    min-width:0
+  }
+  #songRows td:nth-child(1),#songRows td:nth-child(2),#songRows td:nth-child(5),#songRows td:nth-child(6){
+    grid-column:1/-1
+  }
+  #songRows td:first-child{
+    padding-right:52px
+  }
+  #songRows td:nth-child(4){
+    align-self:end;
+    padding-bottom:12px
+  }
+  #songRows td:nth-child(7){
+    position:absolute;
+    right:0;
+    top:32px
+  }
+  #songRows input[type=text],#songRows input[type=number]{
+    min-width:0;
+    width:100%
+  }
+  #songRows td:nth-child(1)::before{
+    content:"Interpret"
+  }
+  #songRows td:nth-child(2)::before{
+    content:"Titel"
+  }
+  #songRows td:nth-child(3)::before{
+    content:"Jahr"
+  }
+  #songRows td:nth-child(5)::before{
+    content:"Eigener Musiklink"
+  }
+  #songRows td::before{
+    display:block;
+    font-size:11px;
+    color:var(--mut);
+    margin-bottom:4px
+  }
+  #songRows .st{
+    overflow-wrap:anywhere;
+    min-width:0
+  }
+  #mSongs>.box>.row{
+    gap:6px
+  }
+}
+.song-selection{
+  max-height:310px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  margin:12px 0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line)
+}
+.song-option{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:11px 2px;
+  min-height:58px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer
+}
+.song-option:last-child{
+  border:0
+}
+.song-option input{
+  width:20px;
+  height:20px;
+  min-height:20px;
+  flex:0 0 20px;
+  accent-color:var(--rot)
+}
+.song-option span{
+  min-width:0
+}
+.song-option b{
+  display:block;
+  font-size:14px;
+  line-height:1.3;
+  overflow-wrap:anywhere
+}
+.song-option small{
+  display:block;
+  font-size:12px;
+  color:var(--mut);
+  margin-top:3px
+}
+.song-option:has(input:not(:checked)) b{
+  color:var(--mut);
+  font-weight:400
+}
+.add-song{
+  border-bottom:1px solid var(--line);
+  padding:0 0 12px
+}
+.add-song summary{
+  cursor:pointer;
+  font-size:14px;
+  font-weight:650;
+  min-height:44px;
+  padding:12px 0
+}
+.add-song form{
+  margin-top:8px
+}
+.add-song label{
+  display:block;
+  font-size:12px;
+  font-weight:650
+}
+.add-song input{
+  display:block;
+  margin-top:5px;
+  width:100%;
+  min-height:44px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:16px
+}
+.add-song .btn{
+  width:100%
+}
+.manage-songs{
+  margin-top:12px;
+  width:100%
+}
+.logo h1{
+  display:inline;
+  margin:0;
+  font:inherit;
+  letter-spacing:inherit
+}
+.selection-warning{
+  margin:0;
+  font-size:12px;
+  color:var(--rot)
+}
+
+/* Modes and per-answer scoring */
+.hero { padding: 8px 0 20px; }
+.hero .claim { font-size: 19px; font-weight: 500; letter-spacing: -.025em; }
+.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.mode-grid button { border:1px solid var(--line); border-radius:6px; padding:10px 6px; background:transparent; font-size:13px; text-align:left; }
+.mode-grid button.on { background:var(--tint); border-color:var(--rot); color:var(--rot); font-weight:700; }
+.card .prompt { font-size:13px; opacity:.8; margin-bottom:12px; }
+.card .given { font-size:27px; line-height:1.15; font-weight:700; letter-spacing:-.03em; overflow-wrap:anywhere; }
+.card .missing { font-size:14px; margin-top:14px; opacity:.85; }
+.turn-heading { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:10px; }
+.turn-heading h2 { margin:0; font-size:18px; letter-spacing:-.03em; }
+.turn-heading span { font-size:12px; color:var(--mut); text-align:right; }
+.bonus-box { margin:12px 0; border-top:1px solid var(--line); }
+.bonus-line { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--line); }
+.bonus-line strong { font-size:13px; }
+.bonus-choices { display:flex; gap:4px; }
+.bonus-choices button { border:1px solid var(--line); border-radius:6px; background:transparent; padding:8px 10px; font-size:12px; }
+.bonus-choices button[aria-pressed=true] { border-color:var(--rot); color:var(--rot); background:var(--tint); font-weight:700; }
+.bonus-note { font-size:12px; color:var(--mut); line-height:1.4; margin:10px 0; }
+.bonus-total { font-size:13px; font-weight:650; margin:12px 0; }
+.answer-prompt { font-size:13px; line-height:1.45; color:var(--mut); margin:12px 0; }
+.duel-board { border-top:1px solid var(--line); padding-top:12px; }
+.duel-score { display:flex; justify-content:space-between; gap:12px; font-size:14px; padding:10px 0; border-bottom:1px solid var(--line); }
+.donation-footer{margin:30px auto 0;padding:16px 0 4px;border-top:2px solid var(--rot);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;max-width:480px;color:var(--rot)}
+.donation-footer strong{font-size:14px;font-weight:700}.donation-footer p{font-size:12px;margin:4px 0 0;color:var(--mut)}.donation-button{background:transparent;color:var(--rot);border:1px solid var(--rot);border-radius:6px;min-height:44px;padding:9px 12px;font-size:12px;font-weight:650;flex-shrink:0}
+@media(max-width:380px){.donation-footer{flex-wrap:wrap}.donation-button{margin-left:auto}}
+</style>
+</head>
+<body>
+<div class="topbar"><header>
+  <div class="logo"><span class="mark"></span><h1 id="gameName"></h1></div>
+  <div class="nav">
+    <button class="ib" id="btnNew" style="display:none">↺ Neu</button>
+    <button class="ib" id="btnSongs">Songs</button>
+    <button class="ib" id="btnRules" aria-label="Regeln">?</button>
+  </div>
+</header></div>
+
+<main id="app" tabindex="-1"></main>
+<div id="ytHost"><div id="ytFrame"></div></div>
+
+<!-- Songliste -->
+<div class="modal" id="mSongs" role="dialog" aria-modal="true" aria-label="Songliste"><div class="box">
+  <div class="mhead"><h2>Songs (<span id="songCount"></span>)</h2><button class="btn sm ghost" data-close>Schließen</button></div>
+  <div class="row" style="flex-wrap:wrap;margin:6px 0 12px">
+    <button class="btn sm red" id="testAll" style="flex:0 0 auto">Alle Songs testen</button>
+    <button class="btn sm ghost" id="addSong" style="flex:0 0 auto">+ Song</button>
+  </div>
+  <div style="overflow:auto;max-height:58vh">
+    <table><thead><tr><th>Interpret</th><th>Titel</th><th>Jahr</th><th></th><th>Eigener Link</th><th>Test</th><th></th></tr></thead><tbody id="songRows"></tbody></table>
+  </div>
+  <details class="box" style="margin-top:12px">
+    <summary>Erklärung & Liste sichern</summary>
+    <p class="hint"><span class="tag ok">vorgegeben</span> = Jahr aus der Standardliste, <span class="tag">bitte prüfen</span> = Quellenlage unklar oder widersprüchlich. Änderungen werden in diesem Browser gespeichert.</p>
+    <p class="hint">Musik kommt über Spotify (wenn verbunden), sonst über YouTube – bis zu 90 Sekunden ab Anfang. Klappt ein Video nicht, nimmt das Spiel das nächste, als Notlösung einen 30-Sek.-Ausschnitt von Apple. „Alle Songs testen“ prüft die Wiedergabe vorab. Das kann mehrere Minuten dauern und lässt sich abbrechen. In „Eigener Link“ kannst du einen YouTube- oder Spotify-Link einfügen, der dann zuerst gespielt wird.</p>
+    <div class="row" style="flex-wrap:wrap">
+      <button class="btn sm ghost" id="resetSongs" style="flex:0 0 auto">Standardliste wiederherstellen</button>
+      <button class="btn sm ghost" id="exportSongs" style="flex:0 0 auto">Liste kopieren</button>
+      <button class="btn sm ghost" id="importToggle" style="flex:0 0 auto">Liste einfügen</button>
+    </div>
+    <div id="importBox" style="display:none;margin-top:10px">
+      <textarea id="importText" rows="5" placeholder="JSON hier einfügen"></textarea>
+      <button class="btn sm" id="doImport" style="margin-top:6px">Übernehmen</button>
+    </div>
+  </details>
+</div></div>
+
+<!-- Regeln -->
+<div class="modal" id="mRules" role="dialog" aria-modal="true" aria-label="Spielregeln"><div class="box" style="max-width:560px">
+  <div class="mhead"><h2>So wird gespielt</h2><button class="btn sm ghost" data-close>OK</button></div>
+  <ol class="rules" id="rulesList"></ol>
+</div></div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =========================================================
+   EINSTELLUNGEN ZUM ANPASSEN
+   ========================================================= */
+const GAME_NAME   = "Trömmelche";
+const DONATE_URL  = "";   // ← hier später den Spendenlink eintragen, z. B. "https://paypal.me/DEINNAME"
+const PLAY_SECONDS = 90;
+
+const RULES = [
+  "Ihr spielt reihum auf einem Gerät. Nennt eure Antworten laut, bevor ihr die Karte aufdeckt.",
+  "Zeitstrahl: Tippt auf die passende Lücke. Richtig eingeordnet bleibt die Karte. Gleiche Jahre dürfen nebeneinander liegen. Es zählt das Erscheinungsjahr, nicht eine spätere Karnevalssession.",
+  "Klassisch: Interpret und Titel erraten. Titel raten: Interpret ist vorgegeben. Interpret raten: Titel ist vorgegeben. Mix wechselt diese drei Varianten. Nur das Jahr zeigt beides.",
+  "Für jeden richtig erratenen, vorher verdeckten Bestandteil gibt es 1 Bonuspunkt und 1 Kamelle. Auch bei falsch eingeordnetem Jahr. Nach dem Aufdecken bestätigt ihr getrennt, was richtig war; bis zum Teamwechsel könnt ihr die Wertung korrigieren.",
+  "1 Kamelle überspringt einen Song, 3 Kamelle kaufen eine Karte. Ausgeben verringert nur die Kamelle, nicht die gesammelten Bonuspunkte.",
+  "Songduell: Ohne Jahreszahlen oder Zeitstrahl, nur Interpret und Titel erraten. Hier entscheiden die Bonuspunkte über den Sieg. In den anderen Modi gewinnt, wer zuerst die Zielzahl an Karten hat.",
+  "Ihr hört bis zu 90 Sekunden. Apple liefert nur einen kurzen Ausschnitt. Falls nötig, startet mit Play."
+];
+
+const MODES = {
+  hoer:{label:"Klassisch",hint:"Interpret und Titel erraten. Bis zu 2 Bonuspunkte pro Song.",fields:["a","t"]},
+  artist:{label:"Titel raten",hint:"Interpret ist vorgegeben. Erratet den Titel: 1 Bonuspunkt.",fields:["t"]},
+  title:{label:"Interpret raten",hint:"Titel ist vorgegeben. Erratet den Interpreten: 1 Bonuspunkt.",fields:["a"]},
+  mix:{label:"Mix",hint:"Klassisch, Titel raten und Interpret raten wechseln von Song zu Song.",fields:[]},
+  quiz:{label:"Nur das Jahr",hint:"Interpret und Titel sind sichtbar. Nur das Jahr einordnen, ohne Bonus.",fields:[]},
+  duel:{label:"Songduell",hint:"Ohne Zeitstrahl: Interpret und Titel erraten. Je 1 Punkt, erster am Punkteziel gewinnt.",fields:["a","t"]}
+};
+const FIELD_NAMES = {a:"Interpret",t:"Titel"};
+const roundMode = () => MODES[game?.roundMode || setup.mode] || MODES.hoer;
+const isDuel = () => setup.mode === "duel";
+const progressOf = p => isDuel() ? p.bonusTotal : p.cards.length;
+const bonusComplete = () => !game || roundMode().fields.every(k=>typeof game.bonus[k]==="boolean");
+
+const THEMES = {
+  koelsch:{ label:"Kölsch",      names:["Reissdorf","Früh","Gaffel","Sion","Peters","Mühlen"] },
+  veedel: { label:"Veedel",      names:["Ehrenfeld","Südstadt","Belgisches","Nippes","Sülz","Deutz"] },
+  fc:     { label:"FC",          names:["Hennes","Geißböcke","Südkurve","Müngersdorf","Effzeh","Rut-Wieß"] },
+  jeck:   { label:"Fastelovend", names:["Dreigestirn","Funkemariechen","Rote Funken","Stippeföttche","Kamelle","Strüßjer"] }
+};
+
+/* ---------- Standard-Songliste ----------
+   c:1 = vorgegebenes Jahr, c:0 = bitte prüfen; yt = YouTube-Videos in Wunschreihenfolge */
+const DEFAULT_SONGS = [
+ {a:"Willi Ostermann", t:"Och wat wor dat fröher schön doch en Colonia", y:1930, c:1, v:7, yt:["2vMj-MErWq4","ouSL1dNPCeg"]},
+ {a:"Karl Berbuer", t:"Heidewitzka, Herr Kapitän", y:1936, c:1, yt:["BRyPDklKRws","Pmdy_AuLiv8","16Q8Sla7Zlw"]},
+ {a:"Willi Ostermann", t:"Heimweh nach Köln", y:1936, c:1, v:7, yt:["lEzGgA0iQzc","IJuNnTxC_FQ"]},
+ {a:"Karl Berbuer", t:"Trizonesien-Song", y:1948, c:1, v:7, yt:["JSF_1A3cgvU","24zmxUw6dcQ","2jnuvycIp-k"]},
+ {a:"Jupp Schmitz", t:"Wer soll das bezahlen?", y:1949, c:1, yt:["sMuOkYLfJtc","uQQm7bKJskM","dliBIdAzH44"]},
+ {a:"Jupp Schmitz", t:"Am Aschermittwoch ist alles vorbei", y:1953, c:0, v:7, yt:["gukvRUkXAVI","EE1orVATDOI"]},
+ {a:"Willy Millowitsch", t:"Schnaps, das war sein letztes Wort", y:1960, c:1, v:7, yt:["L-gF5LZPS4k","Sty06OF7f04","G2pjLuB9p1U"]},
+ {a:"Lotti Krekel", t:"Ne Besuch em Zoo", y:1969, c:0, v:7, yt:["dIc1jVWvEuY","HMh4_73EoF0","JMEDIpti1M0"]},
+ {a:"Jupp Schmitz", t:"Es ist noch Suppe da", y:1969, c:0, v:7, yt:["t0zEYE23xts","x_VH48Gcc6I","IaZ7hgZuRBE"]},
+ {a:"Bläck Fööss", t:"Drink doch eine met", y:1971, c:1, yt:["hJtO5GqIAFk","CWIvUOkFong","VzkG81kp4MQ"]},
+ {a:"Bläck Fööss", t:"Mer losse d'r Dom en Kölle", y:1973, c:1, yt:["QhDAVUtXXCI","Oup46fDhUvI","m9Ph0AHYgQE"]},
+ {a:"Bläck Fööss", t:"En unserem Veedel", y:1973, c:1, yt:["Ahv_9yWmI60","v8TLcFvhOy4","Pesp51dh-zA"]},
+ {a:"Lotti Krekel", t:"Mir schenke der Ahl e paar Blömcher", y:1973, c:0, v:7, yt:["rWPXe8Lgfwk","jvQ2KtBf1eg","78dzqeAnIaI"]},
+ {a:"Bläck Fööss", t:"Pänz, Pänz, Pänz", y:1974, c:1, v:7, yt:["6pCEKmvqSDE","RhdOZmxXhxk","jyLXEzIGTt0"]},
+ {a:"Bläck Fööss", t:"Et Spanien-Leed", y:1976, c:0, v:7, yt:["IyT_0zppP6M","NNgqpMsjdeA"]},
+ {a:"Bläck Fööss", t:"Kaffeebud", y:1978, c:1, v:7, yt:["97xB6_VsGwQ","BNxoFtRicq8"]},
+ {a:"Höhner", t:"Blootwoosch, Kölsch un e lecker Mädche", y:1978, c:1, v:7, yt:["gdcd4KDqZZI","95I5rqR-q94","v-uEYqylTAY"]},
+ {a:"Höhner", t:"Ich ben ne Räuber", y:1979, c:1, v:7, yt:["ngf37SxXx-k","b1zTamSXTQw","5KWt1D7vdrg"]},
+ {a:"Zeltinger Band", t:"Müngersdorfer Stadion", y:1979, c:0, v:7, yt:["HkeRyhcwY0Y","u4hn_dk1_bY","JYxL3nldahk"]},
+ {a:"BAP", t:"Verdamp lang her", y:1981, c:1, yt:["JTO77kruFt0","SppzYb6zJkk","80xZVgwbT14"]},
+ {a:"Höhner", t:"Dat Hätz vun dr Welt", y:1982, c:1, v:7, yt:["FOsbCslIwDI","DUaYtqpYQeI"]},
+ {a:"Höhner", t:"Echte Fründe", y:1984, c:1, yt:["pRNoZZKeaT0","dPqG2DkXVB4","h31mmnZCI1s"]},
+ {a:"Bläck Fööss", t:"Dat Wasser vun Kölle", y:1984, c:0, v:7, yt:["iY7dV9cIpNQ","En-g9gLh1QM","af1cj2F7CN0"]},
+ {a:"Paveier", t:"Ich han de Musik bestellt", y:1984, c:1, v:7, yt:["LvwonxdzvZE","697YmZ8MsvA","LIwsq6e1-iY"]},
+ {a:"Bläck Fööss", t:"Bye bye my love", y:1985, c:1, v:7, yt:["m-WlUGJQaDc","h0pRTShMtLA","QDvRTWZR0MY"]},
+ {a:"Bläck Fööss", t:"Frankreich, Frankreich", y:1985, c:1, v:7, yt:["m-AF_5rXd4s","6qHovGCP9uU"]},
+ {a:"Trude Herr, Wolfgang Niedecken & Tommy Engel", t:"Niemals geht man so ganz", y:1987, c:0, yt:["mN52BzdLh_M","yOzqsMFKsMo","fg2TBq-KP8M"]},
+ {a:"Höhner", t:"Pizza wundaba", y:1987, c:0, v:7, yt:["9ZByRS1Gdco","2d3zJOOyGZw","FQGxiCO0hTA"]},
+ {a:"Paveier", t:"Buenos Dias Matthias", y:1988, c:0, v:7, yt:["RLEFFpe0ZDA","KCulnQmGcmw","pb9NRJ6zylQ"]},
+ {a:"Höhner", t:"Kumm loss mer fiere", y:1991, c:1, v:7, yt:["QL_8at8QxZA","Nq7XnIxBdtQ","pjA2Uy_TDpU"]},
+ {a:"Höhner", t:"Hey Kölle – du bes e Jeföhl", y:1992, c:1, yt:["Af2kgD0k3Ns","xGDn88PkBGw","3rHzSifhxRQ"]},
+ {a:"Räuber", t:"Denn wenn et Trömmelche jeht", y:1993, c:1, yt:["FFkBpxMf-0w","qo87-72iIGk","cxDJaHypFvI"]},
+ {a:"Wicky Junggeburth", t:"Eimol Prinz zo sin", y:1993, c:0, yt:["E13H8_93NvE","ieu7g5bTyt0","A4bEgsb_06c"]},
+ {a:"Räuber", t:"Op dem Maat", y:1993, c:1, v:7, yt:["uc8WS_pXXtM","i5Fz_4lm3m8","18XYm-FW4YY"]},
+ {a:"Paveier", t:"Beinah, beinah", y:1993, c:0, v:7, yt:["aTEmZMGDD_k","O762uu82sbo","vumarUxL6VI"]},
+ {a:"Höhner", t:"Die Karawane zieht weiter", y:1997, c:0, yt:["KntwMZ0sBcQ","xM4nWpbhZ_4","ixp3Wtixi_0"]},
+ {a:"Höhner", t:"Jetzt geht's los", y:1998, c:0, yt:["etPy-h3FBsA","PfXq6dmtsok","Ntr0r2tRDgE"]},
+ {a:"Bläck Fööss", t:"Mer bruche keiner", y:1998, c:1, v:7, yt:["TD1RbZGACcc","w-UT3v5yBLs","v_iFnPysVK0"]},
+ {a:"Höhner", t:"Mer stonn zo dir, FC Kölle", y:1998, c:1, v:7, yt:["59lVJnemqy4","oEjf4DJd16Y"]},
+ {a:"Brings", t:"Superjeilezick", y:2000, c:1, yt:["jB8CgXOP0Oo","OP2QTdh0J6s","vDlw_lVe_34"]},
+ {a:"Bläck Fööss", t:"Unsere Stammbaum", y:2000, c:1, yt:["8hVfVNRE62o","nWrqHQbHGrE","GWN2JNCO2Zo"]},
+ {a:"Bernd Stelter", t:"Ich hab drei Haare auf der Brust", y:2001, c:1, v:7, yt:["tDMqzTr9s70","fyOfaj8BrTE","SzeNKaNQvyQ"]},
+ {a:"Höhner", t:"Viva Colonia", y:2003, c:1, yt:["DD9oG1kIC2I","IMJ94ybAhxk"]},
+ {a:"Brings", t:"Poppe, Kaate, Danze", y:2003, c:1, yt:["t74MF6M6zZo","bmRZW2YuSjg","gm1rFZttbhY"]},
+ {a:"De Boore", t:"Rut sin de Ruse", y:2003, c:1, v:7, yt:["J0tRDqDVKOk","Fmt62cEzxFM","tX-zpvw5NfM"]},
+ {a:"Brings", t:"Su lang mer noch am Lääve sin", y:2004, c:1, yt:["UodXjyklGoc","bqdEkZe2Eoo","lcheGB_NUck"]},
+ {a:"Brings", t:"Man müsste noch mal 20 sein", y:2004, c:1, v:7, yt:["7Sn1FrYclgs","XwktBIz00jE"]},
+ {a:"Bläck Fööss", t:"Rut un wiess", y:2004, c:1, v:7, yt:["7Zh7NI9r0XU","z-fJ5bVU1p0"]},
+ {a:"Höhner", t:"Dä kölsche Pass", y:2006, c:1, v:7, yt:["xuwy1yti9bM","SBCS3ullI2g","I5ISeC2VUvI"]},
+ {a:"Höhner", t:"Wenn nicht jetzt, wann dann?", y:2007, c:1, yt:["ndURsyy0cyM","PBKdnWqbNOg","jR3fvpJfzaA"]},
+ {a:"Tommy Engel", t:"Du bes Kölle", y:2007, c:0, v:7, yt:["GKSyNV-Yk7c","ScE8qUcjby8","4nQ1Zoeii2Y"]},
+ {a:"Brings", t:"Nur nicht aus Liebe weinen", y:2007, c:1, v:7, yt:["-LJwaGQFCTc","zr9kEjftJFY","pX3_UjWopms"]},
+ {a:"Höhner", t:"Schenk mir dein Herz", y:2009, c:1, yt:["UijSViWIbGw","wwBGZ93weto","zSnxEl3aP-I"]},
+ {a:"Brings", t:"Halleluja", y:2010, c:1, yt:["AN0zb6dUD3o","sD6S_QFhnQM","cVLZmCJ9oyU"]},
+ {a:"Klüngelköpp", t:"Stääne", y:2010, c:1, v:7, yt:["596-GBG31ao","VB8ukrTYzr4","rDhHxob75Tg"]},
+ {a:"Kasalla", t:"Pirate", y:2011, c:1, yt:["wvDH7f7GcuY","kkiUUyIvZOo"]},
+ {a:"Brings", t:"Dat is geil", y:2011, c:1, v:7, yt:["i54db3enLwA","hNbCT0s5W1E"]},
+ {a:"Cat Ballou", t:"Et jitt kei Wood", y:2012, c:0, yt:["BlOGqpVzYug","PTA8pXi8tnA"]},
+ {a:"Kasalla", t:"Immer noch do", y:2012, c:1, v:7, yt:["duUSNwPPNsA","wQXB-i7yrRs","BWywdwFOPtc"]},
+ {a:"Brings", t:"Kölsche Jung", y:2013, c:1, yt:["GElkOStokMY","JlpOTGQRMT4","DcNPqsWPbD8"]},
+ {a:"Cat Ballou", t:"Hück steiht de Welt still", y:2013, c:1, yt:["D8kikfi46Ro","Qrp3ZvrLGmI"]},
+ {a:"Kasalla", t:"Kumm mer lääve", y:2013, c:1, v:7, yt:["1cAkUBvvTBM","rCh54iEJVE4","AcWKUDBXyyk"]},
+ {a:"Querbeat", t:"Hück oder nie", y:2013, c:1, v:7, yt:["yErDY9dncy0","En6mzRGgi1Q"]},
+ {a:"Querbeat", t:"Nie mehr Fastelovend", y:2014, c:1, yt:["lkusVFdx_ng","TNAbHIXziyw"]},
+ {a:"Kasalla", t:"Alle Jläser huh", y:2014, c:0, yt:["njYCoHphRvU","-S2QB1emWZo","Ik5JhoLsjoc"]},
+ {a:"Kasalla", t:"Stadt met K", y:2014, c:0, yt:["ZYKGUUWRmuI","LrudFMBPCIs"]},
+ {a:"Brings", t:"Polka, Polka, Polka", y:2014, c:0, yt:["00W44I0ti-Q","_izPLOURZz4","gxO2mV6UEwc"]},
+ {a:"Höhner", t:"Steh auf, mach laut!", y:2014, c:1, v:7, yt:["reiHQ4eS_xE","UBRx2rw3PI8"]},
+ {a:"Paveier", t:"Leev Marie", y:2015, c:1, yt:["RtVZH_kF8yk","vC-R_olORhU"]},
+ {a:"Miljö", t:"Su lang die Leechter noch brenne", y:2015, c:1, yt:["v_ZhOqrPlNg","O3iHqR4n9sU","h31ksztZee4"]},
+ {a:"Querbeat", t:"Tschingderassabum", y:2015, c:1, yt:["kVcIvUU4dZc","5v44Y1wM2R4"]},
+ {a:"Mo-Torres, Cat Ballou & Lukas Podolski", t:"Liebe deine Stadt", y:2016, c:1, yt:["YiWOuw57_dg","x65_s8T1SGQ"]},
+ {a:"Miljö", t:"Wolkeplatz", y:2016, c:1, yt:["aZjuGPMTWWQ","3Dr5eYft8ZA","Mp6wndgWO-g"]},
+ {a:"Kasalla", t:"Mer sin Eins", y:2016, c:1, v:7, yt:["ZOVYt1EUhkk","L-1HyGXw2pI","dHOW_YkJJZg"]},
+ {a:"Querbeat", t:"Guten Morgen Barbarossaplatz", y:2017, c:1, yt:["rX_boXaztmE","yyJUvDs7bY8"]},
+ {a:"Brings", t:"Liebe gewinnt", y:2017, c:1, v:7, yt:["AYiFmh_xA6w","pGBikaai58A"]},
+ {a:"Kasalla", t:"Alle su yeah!", y:2018, c:1, yt:["ua644M0k7MQ","K8GNNjpxDrk"]},
+ {a:"Querbeat", t:"Randale & Hurra", y:2018, c:1, yt:["KhVkAx8A9aQ","L5_DoBtzwWo"]},
+ {a:"Miljö", t:"Schöckelpääd", y:2018, c:0, v:7, yt:["ZuDlUykV31A","woKr4RmAAp4"]},
+ {a:"Höhner", t:"Wir halten die Welt an", y:2018, c:1, v:7, yt:["NwsKIZgSqXY"]},
+ {a:"Kasalla", t:"Pommes un Champagner", y:2019, c:1, yt:["3vkMHhu6U2c","fcEp8U-XqUk"]},
+ {a:"Querbeat", t:"Früher wird alles besser", y:2020, c:1, yt:["4KTvkOnNfLU","T0luP-yNPGY"]},
+ {a:"Kasalla", t:"Rudeldiere", y:2021, c:1, v:7, yt:["5pWjFBdFpbE","ELAo49AFiaA"]},
+ {a:"Miljö", t:"För 1 Naach", y:2022, c:1, yt:["5SrNOOPsoXo","Xl16N0VZEPQ"]},
+ {a:"Höhner", t:"Prinzessin", y:2022, c:1, yt:["gWAZx6dB8xU","4AIFUBytmLo"]},
+ {a:"Paveier", t:"Humba Humba", y:2022, c:1, v:7, yt:["l0h7UzVmxKY"]},
+ {a:"Kasalla & Eko Fresh", t:"Jröne Papajeie", y:2022, c:1, v:7, yt:["ZV69ebK5LcE"]},
+ {a:"Räuber", t:"Oben Unten", y:2023, c:1, yt:["oaSLwxo6VhM","M8IDFBW30R4"]},
+ {a:"Kasalla met Ludwig Sebus", t:"Wenn ich ne Engel bin", y:2023, c:1, v:7, yt:["6eYU2N1vB3s","MFRu9qEA3V4","VFhDfNIa184"]},
+ {a:"Höhner", t:"Au revoir", y:2024, c:1, yt:["WXs1Ub2FR7E","5tBI1ru4ZnA"]},
+ {a:"Druckluft", t:"Karnevalsmaus", y:2025, c:1, yt:["2uH0qFZu_JE","6LlXRtfzf-A","KOaDdsqkU84"]},
+ {a:"Kasalla", t:"¡Adios Amigos!", y:2025, c:1, yt:["u3MOd2nS7Ss","-VqGKrnMj3U"]}
+];
+
+/* =========================================================
+   GRUNDLAGEN
+   ========================================================= */
+const store = {
+  get(k){ try{
+    const key="tr_"+k, own=localStorage.getItem(key);
+    if(own!==null) return JSON.parse(own);
+    // Import only game preferences and song lists from the former app, never login tokens.
+    if(["kh_songs_v2","kh_songs_ver","kh_setup3","kh_setup"].includes(k)){
+      const old=localStorage.getItem(k); if(old!==null){ localStorage.setItem(key,old); return JSON.parse(old); }
+    }
+    return null;
+  }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem("tr_"+k, JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem("tr_"+k); }catch(e){} }
+};
+const SONG_VER = 7;   // bei neuen Standard-Songs hochzählen und den neuen Einträgen v:<Nummer> geben
+let songs = (()=>{
+  const fresh = () => DEFAULT_SONGS.map(s=>({...s, yt:[...s.yt]}));
+  const saved = store.get("kh_songs_v2");
+  if(!Array.isArray(saved)) return fresh();
+  saved.splice(0, saved.length, ...saved.filter(s=>s && typeof s.a==="string" && typeof s.t==="string"));
+  saved.forEach(s=>{ delete s._it; });
+  const ver = +store.get("kh_songs_ver") || 6;
+  if(ver >= SONG_VER) return saved;
+  // gespeicherte Liste behalten (eigene Änderungen/Löschungen bleiben), nur neue Standard-Songs ergänzen
+  const k = s => String(s.a||"").toLowerCase() + "|" + String(s.t||"").toLowerCase();
+  const have = new Set(saved.map(k));
+  DEFAULT_SONGS.filter(s => (s.v||6) > ver && !have.has(k(s))).forEach(s => saved.push({...s, yt:[...s.yt]}));
+  saved.sort((x,y)=>(+x.y||0)-(+y.y||0));
+  store.set("kh_songs_v2", saved);
+  return saved;
+})();
+store.set("kh_songs_ver", SONG_VER);
+const saveSongs = ()=> store.set("kh_songs_v2", songs.map(({_it,...s})=>s));
+
+let setup = store.get("kh_setup3");
+if(!setup){
+  const old = store.get("kh_setup");
+  setup = { count:2, theme:"koelsch", names:THEMES.koelsch.names.slice(), mode:(old&&old.mode)||"hoer", target:(old&&old.target)||10 };
+}
+setup = { ...setup,
+  count: Math.max(1, Math.min(6, Math.round(Number(setup.count)||2))),
+  target: Math.max(3, Math.min(30, Math.round(Number(setup.target)||10))),
+  mode: Object.hasOwn(MODES,setup.mode) ? setup.mode : "hoer",
+  theme: THEMES[setup.theme] ? setup.theme : "eigene",
+  names: Array.isArray(setup.names) ? setup.names.map(n=>String(n).slice(0,22)) : THEMES.koelsch.names.slice()
+};
+const validYear = y => y !== null && String(y).trim() !== "" && Number.isInteger(Number(y)) && Number(y) >= 1800 && Number(y) <= new Date().getFullYear();
+const saveSetup = ()=> store.set("kh_setup3", setup);
+let game = null;
+let playbackEpoch = 0;
+
+const $ = s => document.querySelector(s);
+const app = $("#app");
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle = a => { for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.style.display="block"; clearTimeout(t._h); t._h=setTimeout(()=>t.style.display="none",2600); }
+const ytLink = s => "https://www.youtube.com/results?search_query=" + encodeURIComponent(s.a + " " + s.t);
+const norm = s => String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+const artistFirst = a => String(a).split(/,|\sfeat\.?\s|\s&\s|\sund\s/i)[0].trim();
+const artistKey = a => norm(artistFirst(a));
+const songKey = s => norm(s.a) + "|" + norm(s.t);
+function matchScore(song, artist, name, album){
+  let sc = 0; const ak = artistKey(song.a), ca = norm(artist), ct = norm(name);
+  if(ak && ca && (ca.includes(ak) || ak.includes(ca))) sc += 3;
+  const words = norm(song.t).split(" ").filter(w=>w.length>2);
+  if(words.length) sc += 3 * words.filter(w=>ct.includes(w)).length / words.length;
+  const extra = norm(name + " " + (album||""));
+  if(/karaoke|instrumental|cover|tribute/.test(extra)) sc -= 4;
+  if(/\blive\b/.test(extra)) sc -= 1;
+  if(/remix|club mix|party mix|edit\b/.test(extra)) sc -= .7;
+  return sc;
+}
+function parseLink(v){
+  v = String(v||"").trim(); if(!v) return {};
+  let m = v.match(/spotify\.com\/(?:intl-[\w-]+\/)?track\/([A-Za-z0-9]{22})/) || v.match(/spotify:track:([A-Za-z0-9]{22})/);
+  if(m) return {sp:m[1]};
+  m = v.match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([\w-]{11})/); if(m) return {u:m[1]};
+  if(/^[\w-]{11}$/.test(v)) return {u:v};
+  return {bad:true};
+}
+document.title = GAME_NAME; $("#gameName").textContent = GAME_NAME;
+$("#rulesList").innerHTML = RULES.map(r=>`<li>${r}</li>`).join("");
+
+/* =========================================================
+   SPOTIFY (optional)
+   ========================================================= */
+const SP = { clientId: store.get("kh_sp_client")||"", tok: store.get("kh_sp_tok")||null, player:null, device:null, ready:false, failed:false, err:"", user:"", sdk:false };
+const SP_SCOPES = "streaming user-read-email user-read-private user-modify-playback-state user-read-playback-state";
+const spCache = store.get("kh_sp_cache_v2") || {};
+const redirectUri = () => location.origin + location.pathname;
+const spConnected = () => !!(SP.tok && SP.tok.refresh && SP.clientId);
+function b64url(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function randomString(n){ const c="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; const a=new Uint8Array(n); crypto.getRandomValues(a); return Array.from(a,x=>c[x%c.length]).join(""); }
+async function spLogin(){
+  if(!SP.clientId){ toast("Erst die Client-ID eintragen."); return; }
+  if(!window.crypto || !crypto.subtle){ toast("Spotify-Login geht nur über https."); return; }
+  const verifier = randomString(64);
+  const challenge = b64url(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier)));
+  store.set("kh_sp_verifier", verifier);
+  const state = randomString(32); store.set("kh_sp_state", state);
+  const p = new URLSearchParams({ client_id:SP.clientId, response_type:"code", state, redirect_uri:redirectUri(), code_challenge_method:"S256", code_challenge:challenge, scope:SP_SCOPES });
+  location.href = "https://accounts.spotify.com/authorize?" + p;
+}
+function spLogout(){ SP.tok=null; store.del("kh_sp_tok"); try{ SP.player && SP.player.disconnect(); }catch(e){} SP.player=null; SP.sdk=false; SP.failed=false; SP.ready=false; SP.device=null; SP.user=""; }
+function spSaveTok(d){ SP.tok = { access:d.access_token, refresh:d.refresh_token || (SP.tok && SP.tok.refresh), exp: Date.now() + ((d.expires_in||3600) - 60)*1000 }; store.set("kh_sp_tok", SP.tok); }
+async function spTokenRequest(params){
+  const r = await fetch("https://accounts.spotify.com/api/token", { method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:new URLSearchParams(params) });
+  const d = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(d.error_description || d.error || ("HTTP "+r.status));
+  return d;
+}
+async function spHandleRedirect(){
+  const q = new URLSearchParams(location.search);
+  if(!q.has("code") && !q.has("error")) return;
+  history.replaceState(null, "", redirectUri());
+  const expectedState = store.get("kh_sp_state"); store.del("kh_sp_state");
+  if(!expectedState || q.get("state") !== expectedState){ store.del("kh_sp_verifier"); toast("Spotify-Anmeldung bitte erneut starten."); return; }
+  if(q.get("error")){ store.del("kh_sp_verifier"); toast("Spotify-Anmeldung abgebrochen."); return; }
+  try{
+    const d = await spTokenRequest({ grant_type:"authorization_code", code:q.get("code"), redirect_uri:redirectUri(), client_id:SP.clientId, code_verifier:store.get("kh_sp_verifier")||"" });
+    spSaveTok(d); toast("Spotify ist verbunden 🎉");
+  }catch(e){ toast("Spotify-Anmeldung fehlgeschlagen: " + e.message); }
+  finally { store.del("kh_sp_verifier"); }
+}
+async function spToken(){
+  if(!SP.tok) return null;
+  if(Date.now() < SP.tok.exp && SP.tok.access) return SP.tok.access;
+  try{ spSaveTok(await spTokenRequest({ grant_type:"refresh_token", refresh_token:SP.tok.refresh, client_id:SP.clientId })); return SP.tok.access; }
+  catch(e){ spLogout(); toast("Spotify-Anmeldung abgelaufen – bitte neu verbinden."); renderSetupIfOpen(); return null; }
+}
+async function spApi(path, opts={}, retry=true){
+  const t = await spToken(); if(!t) throw new Error("notoken");
+  const r = await fetch("https://api.spotify.com/v1" + path, { ...opts, headers:{ ...(opts.headers||{}), Authorization:"Bearer "+t, "Content-Type":"application/json" } });
+  if(r.status === 401 && retry){ SP.tok.exp = 0; return spApi(path, opts, false); }
+  return r;
+}
+function spBoot(){
+  if(!spConnected() || SP.sdk) return;
+  SP.sdk = true;
+  if(window.Spotify){ spInitPlayer(); return; }
+  spApi("/me").then(r=>r.ok?r.json():null).then(d=>{ if(d){ SP.user = d.display_name || d.id; if(d.product && d.product!=="premium"){ SP.failed=true; SP.err="Kein Premium-Konto"; } renderSetupIfOpen(); } }).catch(()=>{});
+  window.onSpotifyWebPlaybackSDKReady = spInitPlayer;
+  const s = document.createElement("script"); s.src = "https://sdk.scdn.co/spotify-player.js";
+  s.onerror = ()=>{ SP.failed = true; SP.err = "Spotify-Player lädt nicht"; spRelease(); };
+  document.head.appendChild(s);
+}
+function spInitPlayer(){
+  SP.player = new Spotify.Player({ name: GAME_NAME, getOAuthToken: cb => { spToken().then(t=>{ if(t) cb(t); }); }, volume: 1 });
+  SP.player.addListener("ready", ({device_id}) => { SP.device = device_id; SP.ready = true; spRelease(); renderSetupIfOpen(); });
+  SP.player.addListener("not_ready", () => { SP.ready = false; });
+  ["initialization_error","authentication_error","account_error"].forEach(ev => SP.player.addListener(ev, ({message}) => {
+    SP.failed = true; SP.err = ev==="account_error" ? "Premium nötig" : message; spRelease(); renderSetupIfOpen();
+  }));
+  SP.player.addListener("playback_error", () => { if(P.mode==="sp"){ P.idx++; P.autoplay=true; tryCand(); } });
+  SP.player.addListener("player_state_changed", onSpState);
+  SP.player.connect();
+}
+function spRelease(){ if(P.waitingSP){ P.waitingSP = false; tryCand(); } }
+function spActivate(){ try{ SP.player && SP.player.activateElement && SP.player.activateElement(); }catch(e){} }
+async function spFindTrack(song){
+  if(song.sp) return { uri:"spotify:track:"+song.sp, title:"eigener Spotify-Link", link:"https://open.spotify.com/track/"+song.sp };
+  const key = songKey(song);
+  if(spCache[key] !== undefined) return spCache[key];
+  const tryQ = async q => {
+    const r = await spApi("/search?type=track&market=DE&limit=10&q=" + encodeURIComponent(q));
+    if(!r.ok) throw new Error("search " + r.status);
+    const d = await r.json();
+    const items = ((d.tracks||{}).items||[]).map(t=>({ t, sc: matchScore(song, (t.artists[0]||{}).name, t.name, (t.album||{}).name) })).filter(x=>x.sc>=5).sort((a,b)=>b.sc-a.sc);
+    return items[0] ? { uri:items[0].t.uri, title:(items[0].t.artists||[]).map(a=>a.name).join(", ")+" – "+items[0].t.name, link:(items[0].t.external_urls||{}).spotify||"" } : null;
+  };
+  let found = await tryQ(`track:${song.t} artist:${artistFirst(song.a)}`);
+  if(!found) found = await tryQ(artistFirst(song.a) + " " + song.t);
+  spCache[key] = found; store.set("kh_sp_cache_v2", spCache);
+  return found;
+}
+async function spPlayUri(uri){
+  const song = P.song, epoch = playbackEpoch;
+  let r;
+  try{ r = await spApi(`/me/player/play?device_id=${encodeURIComponent(SP.device)}`, { method:"PUT", body: JSON.stringify({ uris:[uri], position_ms:0 }) }); }
+  catch(e){ if(P.song===song && P.mode==="sp" && epoch===playbackEpoch){ P.idx++; tryCand(); } return; }
+  if(P.song!==song || P.mode!=="sp" || epoch!==playbackEpoch) return;
+  if(r.status === 403){ SP.failed = true; SP.err = "Spotify erlaubt die Wiedergabe nicht (Premium?)"; toast(SP.err); P.idx++; return tryCand(); }
+  if(!r.ok){ P.idx++; return tryCand(); }
+  armBlocked(3500);
+}
+function onSpState(st){
+  if(!st || P.mode !== "sp") return;
+  const cur = st.track_window && st.track_window.current_track;
+  if(cur && P.spUri && cur.uri !== P.spUri && !(cur.linked_from && cur.linked_from.uri === P.spUri)) return;
+  if(!st.paused){
+    clearTimeout(P.tapTimer);
+    if(P.state !== "playing"){ P.spStarted = true; setState("playing"); startWatch(); }
+  } else if(P.state === "playing"){ setState("paused"); }
+}
+
+/* =========================================================
+   YOUTUBE (Standard) + APPLE-AUSSCHNITT (Notlösung)
+   ========================================================= */
+const ytHost = $("#ytHost");
+let ytPlayer = null, ytReady = false, ytFailed = false, testHook = null;
+const ytOk = store.get("kh_ytok") || {};
+const ytBad = new Set(store.get("kh_ytbad") || []);
+function saveYt(){ store.set("kh_ytok", ytOk); store.set("kh_ytbad", [...ytBad]); }
+(function loadYT(){
+  const giveUp = () => { if(ytReady) return; ytFailed = true; if(P.waitingYT){ P.waitingYT=false; P.idx++; tryCand(); } };
+  const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; s.onerror = giveUp;
+  document.head.appendChild(s); setTimeout(giveUp, 15000);
+})();
+window.onYouTubeIframeAPIReady = function(){
+  ytPlayer = new YT.Player("ytFrame", {
+    width:"100%", height:"100%",
+    playerVars:{ playsinline:1, controls:0, disablekb:1, fs:0, rel:0, iv_load_policy:3, modestbranding:1 },
+    events:{
+      onReady: () => { ytReady = true; ytFailed = false; if(P.waitingYT){ P.waitingYT=false; tryCand(); } },
+      onStateChange: e => { if(testHook) return testHook.state(e.data); onYTState(e.data); },
+      onError: e => { if(testHook) return testHook.error(e.data); onYTError(e.data); }
+    }
+  });
+};
+const audio = new Audio(); audio.preload = "auto";
+const SILENT = "data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==";
+let audioUnlocked = false;
+function unlockAudio(){
+  if(audioUnlocked) return; audioUnlocked = true;
+  try{ audio.src = SILENT; const p = audio.play(); if(p) p.then(()=>{ if(audio.src.startsWith("data:")) audio.pause(); }).catch(()=>{}); }catch(e){}
+}
+let jsonpN = 0;
+function jsonp(url, timeout=9000){
+  return new Promise((res,rej)=>{
+    const cb = "__kh" + (jsonpN++) + "_" + Date.now(); const s = document.createElement("script");
+    const t = setTimeout(()=>{ cleanup(); rej(new Error("timeout")); }, timeout);
+    function cleanup(){ clearTimeout(t); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } s.remove(); }
+    window[cb] = d => { cleanup(); res(d); }; s.onerror = () => { cleanup(); rej(new Error("net")); };
+    s.src = url + (url.includes("?")?"&":"?") + "callback=" + cb; document.head.appendChild(s);
+  });
+}
+async function itunesPreview(song){
+  if(song._it !== undefined) return song._it;
+  let found = null;
+  try{
+    const d = await jsonp("https://itunes.apple.com/search?entity=song&country=de&limit=15&term=" + encodeURIComponent(artistFirst(song.a)+" "+song.t));
+    const c = (d.results||[]).filter(r=>r.previewUrl).map(r=>({r, sc:matchScore(song, r.artistName, r.trackName, r.collectionName)})).filter(x=>x.sc>=5).sort((a,b)=>b.sc-a.sc)[0];
+    if(c) found = { url:c.r.previewUrl, title:c.r.artistName+" – "+c.r.trackName, link:c.r.trackViewUrl };
+  }catch(e){}
+  song._it = found; return found;
+}
+
+/* =========================================================
+   ABSPIEL-STEUERUNG (Spotify → YouTube → Apple)
+   ========================================================= */
+const P = { song:null, cands:[], idx:0, mode:null, state:"idle", autoplay:true, title:"", link:"", tapTimer:null, watch:null, waitingYT:false, waitingSP:false, spUri:"", spStarted:false };
+function candidatesFor(song){
+  const out = [];
+  if(spConnected() && !SP.failed) out.push({type:"sp"});
+  const list = []; if(song.u) list.push(song.u);
+  const ok = ytOk[songKey(song)]; if(ok) list.push(ok);
+  (song.yt||[]).forEach(id=>list.push(id));
+  [...new Set(list)].filter(id => !ytBad.has(id) || id===song.u || id===ok).forEach(id=>out.push({type:"yt", id}));
+  out.push({type:"itunes"});
+  return out;
+}
+const setState = st => { P.state = st; updatePlayerUI(); };
+function stopAll(){
+  playbackEpoch++;
+  const previousMode = P.mode; P.mode = null; P.state = "idle";
+  clearTimeout(P.tapTimer); clearInterval(P.watch); P.waitingSP = false; P.waitingYT = false;
+  try{ if(ytPlayer && ytReady) ytPlayer.stopVideo(); }catch(e){}
+  try{ audio.pause(); }catch(e){}
+  try{ if(SP.player && SP.ready && previousMode==="sp") SP.player.pause().catch(()=>{}); }catch(e){}
+}
+function startSong(song, autoplay){
+  stopAll(); spActivate();
+  Object.assign(P, { song, cands:candidatesFor(song), idx:0, autoplay, title:"", link:"", spUri:"", spStarted:false });
+  tryCand();
+}
+function armBlocked(ms){ clearTimeout(P.tapTimer); P.tapTimer = setTimeout(()=>{ if(P.state==="loading") setState("blocked"); }, ms); }
+function tryCand(){
+  stopAll();
+  const epoch = playbackEpoch;
+  const c = P.cands[P.idx];
+  clearTimeout(P.tapTimer); clearInterval(P.watch); P.title = ""; P.link = "";
+  if(!c){ P.mode = null; setState("none"); return; }
+  const song = P.song;
+  if(c.type === "sp"){
+    P.mode = "sp"; setState("loading");
+    if(!SP.ready){
+      if(SP.failed || !spConnected()){ P.idx++; return tryCand(); }
+      spBoot(); P.waitingSP = true;
+      setTimeout(()=>{ if(P.waitingSP && P.song===song && epoch===playbackEpoch){ P.waitingSP=false; P.idx++; tryCand(); } }, 9000);
+      return;
+    }
+    spFindTrack(song).then(tr=>{
+      if(P.song !== song || P.mode !== "sp" || epoch !== playbackEpoch) return;
+      if(!tr){ P.idx++; return tryCand(); }
+      P.title = tr.title; P.link = tr.link; P.spUri = tr.uri;
+      if(P.autoplay) spPlayUri(tr.uri); else setState("paused");
+    }).catch(()=>{ if(P.song===song && P.mode==="sp" && epoch===playbackEpoch){ P.idx++; tryCand(); } });
+  } else if(c.type === "yt"){
+    P.mode = "yt"; setState("loading");
+    if(!ytReady){ if(ytFailed){ P.idx++; return tryCand(); } P.waitingYT = true; return; }
+    P.link = "https://www.youtube.com/watch?v=" + c.id;
+    try{ ytPlayer.unMute(); ytPlayer.setVolume(100); }catch(e){}
+    const o = { videoId:c.id, startSeconds:0, endSeconds:PLAY_SECONDS };
+    if(P.autoplay) ytPlayer.loadVideoById(o); else ytPlayer.cueVideoById(o);
+    armBlocked(3000);
+  } else {
+    P.mode = "audio"; setState("loading");
+    itunesPreview(song).then(f=>{
+      if(P.song !== song || P.mode !== "audio" || epoch !== playbackEpoch) return;
+      if(!f){ P.idx++; return tryCand(); }
+      P.title = f.title + " (30-Sek.-Ausschnitt)"; P.link = f.link;
+      if(P.autoplay) playAudio(f.url); else { audio.src = f.url; setState("paused"); }
+    });
+  }
+}
+function startWatch(){
+  clearInterval(P.watch);
+  const epoch = playbackEpoch;
+  P.watch = setInterval(async ()=>{
+    try{
+      let pos = 0;
+      if(P.mode==="yt") pos = ytPlayer.getCurrentTime();
+      else if(P.mode==="sp"){ const s = await SP.player.getCurrentState(); pos = s ? s.position/1000 : 0; }
+      else return;
+      if(epoch!==playbackEpoch) return;
+      if(pos >= PLAY_SECONDS){ clearInterval(P.watch); if(P.mode==="yt") ytPlayer.pauseVideo(); else SP.player.pause(); setState("ended"); }
+    }catch(e){}
+  }, 500);
+}
+function onYTState(s){
+  if(P.mode !== "yt") return;
+  if(s === 1){
+    try{ const data=ytPlayer.getVideoData(), candidate=P.cands[P.idx]; if(data.video_id && candidate && data.video_id!==candidate.id) return; }catch(e){}
+    clearTimeout(P.tapTimer);
+    try{ const d = ytPlayer.getVideoData(); if(d && d.title) P.title = d.title; }catch(e){}
+    const c = P.cands[P.idx]; if(c && c.type==="yt" && P.song){ ytOk[songKey(P.song)] = c.id; saveYt(); }
+    setState("playing"); startWatch();
+  } else if(s === 2){ if(P.state === "playing") setState("paused"); }
+  else if(s === 0){ clearInterval(P.watch); setState("ended"); }
+  else if(s === 3){ if(P.state === "loading") armBlocked(7000); }
+  else if(s === 5){ if(P.state === "loading") setState(P.autoplay ? "blocked" : "paused"); }
+}
+function onYTError(){
+  if(P.mode !== "yt") return;
+  const c = P.cands[P.idx];
+  if(c && c.type==="yt"){ ytBad.add(c.id); if(P.song && ytOk[songKey(P.song)]===c.id) delete ytOk[songKey(P.song)]; saveYt(); }
+  P.idx++; P.autoplay = true; tryCand();
+}
+function playAudio(url){
+  const epoch = playbackEpoch;
+  audio.src = url; const p = audio.play();
+  if(p && p.then) p.then(()=>{ if(epoch===playbackEpoch) setState("playing"); }).catch(()=>{ if(epoch===playbackEpoch) setState("blocked"); }); else setState("playing");
+}
+audio.addEventListener("error", ()=>{ if(P.mode==="audio" && !audio.src.startsWith("data:")){ P.idx++; tryCand(); } });
+audio.addEventListener("ended", ()=>{ if(P.mode==="audio" && !audio.src.startsWith("data:")) setState("ended"); });
+
+function togglePlay(){
+  unlockAudio(); spActivate();
+  if(P.mode === "sp" && SP.player){
+    if(P.state === "playing"){ SP.player.pause(); setState("paused"); return; }
+    if(!P.spStarted){ if(P.spUri){ setState("loading"); spPlayUri(P.spUri); } return; }
+    if(P.state === "ended") SP.player.seek(0);
+    SP.player.resume(); setState("loading"); armBlocked(3000);
+  } else if(P.mode === "yt" && ytReady){
+    if(P.state === "playing"){ ytPlayer.pauseVideo(); setState("paused"); return; }
+    if(P.state === "ended") ytPlayer.seekTo(0, true);
+    P.autoplay = true; ytPlayer.playVideo(); if(P.state!=="blocked") setState("loading"); armBlocked(2500);
+  } else if(P.mode === "audio"){
+    if(P.state === "playing"){ audio.pause(); setState("paused"); return; }
+    if(P.state === "ended") audio.currentTime = 0;
+    const epoch = playbackEpoch;
+    const p = audio.play(); if(p && p.then) p.then(()=>{ if(epoch===playbackEpoch) setState("playing"); }).catch(()=>{ if(epoch===playbackEpoch) setState("blocked"); });
+  } else if(P.song){ P.autoplay = true; P.idx = 0; tryCand(); }
+}
+function restart(){
+  unlockAudio(); spActivate();
+  if(P.mode === "sp" && SP.player){ if(P.spStarted){ SP.player.seek(0).then(()=>SP.player.resume()); } else if(P.spUri) spPlayUri(P.spUri); }
+  else if(P.mode === "yt" && ytReady){ ytPlayer.seekTo(0, true); ytPlayer.playVideo(); armBlocked(2500); }
+  else if(P.mode === "audio"){ audio.currentTime = 0; playAudio(audio.src); }
+}
+function nextMatch(){
+  unlockAudio(); spActivate();
+  if(!P.song) return;
+  if(P.idx >= P.cands.length-1){ toast("Keine weitere Quelle vorhanden."); return; }
+  const c = P.cands[P.idx];
+  if(c && c.type==="yt" && ytOk[songKey(P.song)]===c.id){ delete ytOk[songKey(P.song)]; saveYt(); }
+  stopAll(); P.idx++; P.autoplay = true; P.spStarted = false; tryCand();
+  const n = P.cands[P.idx];
+  if(!n) return;
+  toast(n.type==="yt" ? "Nächstes YouTube-Video" : n.type==="itunes" ? "Notlösung: 30-Sek.-Ausschnitt" : "Spotify");
+}
+const SRC = { sp:"Spotify", yt:"YouTube", audio:"Apple-Ausschnitt" };
+function updatePlayerUI(){
+  const st = P.state, btn = $("#pPlay"), lab = $("#pStatus"), eq = $("#pEq"), card = $("#theCard");
+  if(eq) eq.classList.toggle("on", st==="playing");
+  if(card){
+    const tap = (st==="blocked" && P.mode==="yt");
+    card.classList.toggle("tap", tap);
+    let note = card.querySelector(".tapnote");
+    const want = st==="blocked";
+    if(want && !note){ note = document.createElement("div"); note.className = "tapnote"; card.appendChild(note); }
+    if(note) note.textContent = "Zum Starten auf Play oder die Karte tippen";
+    if(!want && note) note.remove();
+  }
+  if(btn){ btn.setAttribute("aria-label", st==="playing" ? "Pausieren" : "Abspielen"); btn.textContent = st==="playing" ? "❚❚" : "▶︎"; btn.disabled = st==="none"; }
+  if(lab){
+    const src = SRC[P.mode] ? " · " + SRC[P.mode] : "";
+    lab.textContent = ({ idle:"", loading:"lädt …", playing:"läuft"+src, paused:"Pause"+src, ended:"vorbei – ▶︎ für nochmal", blocked:"tippen zum Starten", none:"Kein Song gefunden" })[st] || "";
+    if(P.mode==="audio" && st==="playing") lab.textContent = "läuft · nur 30-Sek.-Ausschnitt";
+  }
+  
+}
+function placeYT(){
+  const slot = $("#cardSlot");
+  if(!slot || !game){ Object.assign(ytHost.style, { left:"-9999px", top:"0px", width:"320px", height:"320px" }); return; }
+  const r = slot.getBoundingClientRect();
+  Object.assign(ytHost.style, { left:(r.left+scrollX+2)+"px", top:(r.top+scrollY+2)+"px", width:Math.max(200,r.width-4)+"px", height:Math.max(200,r.height-4)+"px" });
+}
+addEventListener("resize", ()=>requestAnimationFrame(placeYT));
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(placeYT);
+
+/* =========================================================
+   STARTSEITE
+   ========================================================= */
+let setupOpen = { opts:false, music:false, songs:false };
+function namesFor(theme, n){ const base = (THEMES[theme]||{}).names || []; return Array.from({length:n}, (_,i)=> base[i] || ("Team " + (i+1))); }
+function renderSetupIfOpen(){ if(!game && $("#setupRoot")) renderSetup(); }
+function renderSetup(){
+  stopAll(); P.song = null; P.mode = null; game = null;
+  $("#btnNew").style.display = "none";
+  while(setup.names.length < setup.count) setup.names.push(namesFor(setup.theme, setup.count)[setup.names.length]);
+  const n = setup.count;
+  const valid = songs.filter(s=>s.enabled!==false && s.a && s.t && validYear(s.y)).length;
+  const spState = !SP.clientId ? "aus" : spConnected() ? (SP.failed ? "Problem" : SP.ready ? "verbunden" : "verbunden") : "nicht verbunden";
+  app.innerHTML = `
+  <div class="setup" id="setupRoot">
+    <div class="hero"><p class="claim">Welche Session war dat noch ens?</p></div>
+    <div class="stack">
+      <div class="box">
+        <label class="l">Teams</label>
+        <div class="stepper"><button id="minus" aria-label="Weniger Teams" ${n<=1?"disabled":""}>−</button><b>${n}</b><button id="plus" aria-label="Mehr Teams" ${n>=6?"disabled":""}>+</button><span class="hint" style="margin-left:auto">bis zu 6 Teams</span></div>
+        <div class="chips" style="margin-top:14px">${Object.entries(THEMES).map(([k,t])=>`<button class="chip ${setup.theme===k?"on":""}" data-th="${k}">${t.label}</button>`).join("")}</div>
+        <div class="names" style="margin-top:12px">${setup.names.slice(0,n).map((nm,i)=>`<input type="text" data-i="${i}" aria-label="Name Team ${i+1}" value="${esc(nm)}" maxlength="22">`).join("")}</div>
+      </div>
+      <button class="btn red big" id="start">Loss jonn!</button>
+      <p class="selection-warning" id="selectionWarning" hidden></p>
+      <details class="box" id="dOpts" ${setupOpen.opts?"open":""}><summary>Spielart & Ziel <small>${MODES[setup.mode].label} · ${setup.target} ${isDuel()?"Punkte":"Karten"}</small></summary>
+        <div class="mode-grid" id="modeSeg">${Object.entries(MODES).map(([key,mode])=>`<button data-m="${key}" aria-pressed="${setup.mode===key}" class="${setup.mode===key?"on":""}">${mode.label}</button>`).join("")}</div>
+        <p class="hint">${MODES[setup.mode].hint}</p>
+        <label class="l" style="margin-top:12px">${isDuel()?"Punkte":"Karten"} zum Sieg</label>
+        <div class="stepper"><button id="tMinus" aria-label="Weniger ${isDuel()?'Punkte':'Karten'}" ${setup.target<=3?"disabled":""}>−</button><b>${setup.target}</b><button id="tPlus" aria-label="Mehr ${isDuel()?'Punkte':'Karten'}" ${setup.target>=30?"disabled":""}>+</button><span class="hint" style="margin-left:auto">${valid} Songs im Stapel</span></div>
+      </details>
+      <details class="box" id="dMusic" ${setupOpen.music?"open":""}><summary>Musik <small>${SP.clientId ? "Spotify: "+spState : "YouTube"}</small></summary>
+        ${renderSpotifyBox()}
+      </details>
+      <details class="box" id="dSelection" ${setupOpen.songs?"open":""}>
+        <summary>Songauswahl <small id="selectionCount"></small></summary>
+        <p class="hint">Nur angehakte Songs kommen in den Stapel. Eure Auswahl bleibt auf diesem Gerät gespeichert.</p>
+        <div class="row selection-actions"><button class="btn sm ghost" id="selectAll">Alle auswählen</button><button class="btn sm ghost" id="selectNone">Keine auswählen</button></div>
+        <div class="song-selection" id="songSelection"></div>
+        <details class="add-song"><summary>+ Eigenen Song hinzufügen</summary>
+          <form id="newSongForm" class="stack">
+            <label>Interpret<input name="artist" required maxlength="150" autocomplete="off"></label>
+            <label>Titel<input name="title" required maxlength="200" autocomplete="off"></label>
+            <label>Jahr<input name="year" type="number" required min="1800" max="${new Date().getFullYear()}" inputmode="numeric" placeholder="z. B. 1998"></label>
+            <label>YouTube- oder Spotify-Link <span class="mut">(optional)</span><input name="link" type="text" autocomplete="off" placeholder="https://…"></label>
+            <p class="hint">Ohne Link wird nach einem passenden Ausschnitt gesucht. Das Jahr tragt ihr selbst ein.</p>
+            <button class="btn" type="submit">Hinzufügen & auswählen</button>
+          </form>
+        </details>
+        <button class="btn sm ghost manage-songs" id="manageSongs">Songs bearbeiten & testen</button>
+      </details>
+    </div>
+    ${donationFooter()}
+  </div>`;
+  const nm = app.querySelectorAll(".names input");
+  nm.forEach(inp => inp.oninput = e => { setup.names[+e.target.dataset.i] = e.target.value; setup.theme = "eigene"; saveSetup(); app.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); });
+  $("#minus").onclick = () => { setup.count = Math.max(1, n-1); saveSetup(); renderSetup(); };
+  $("#plus").onclick = () => { setup.count = Math.min(6, n+1); if(setup.names.length < setup.count) setup.names.push(namesFor(setup.theme==="eigene"?"koelsch":setup.theme, setup.count)[setup.count-1]); saveSetup(); renderSetup(); };
+  app.querySelectorAll("[data-th]").forEach(b => b.onclick = () => { setup.theme = b.dataset.th; setup.names = namesFor(setup.theme, 6); saveSetup(); renderSetup(); });
+  $("#modeSeg").querySelectorAll("button").forEach(b => b.onclick = () => { setup.mode = b.dataset.m; saveSetup(); renderSetup(); });
+  $("#tMinus").onclick = () => { setup.target = Math.max(3, setup.target-1); saveSetup(); renderSetup(); };
+  $("#tPlus").onclick = () => { setup.target = Math.min(30, setup.target+1); saveSetup(); renderSetup(); };
+  $("#dOpts").ontoggle = e => setupOpen.opts = e.target.open;
+  $("#dMusic").ontoggle = e => setupOpen.music = e.target.open;
+  $("#start").onclick = startGame;
+  if($("#donate")) $("#donate").onclick = donate;
+  bindSpotifyBox();
+  bindSongSelection();
+  placeYT();
+}
+function selectionSummary(){
+  const count = songs.filter(s=>s.enabled!==false && s.a && s.t && validYear(s.y)).length;
+  const label = $("#selectionCount"); if(label) label.textContent = `${count} von ${songs.length}`;
+  const warning = $("#selectionWarning"); if(warning){ warning.hidden=count>=setup.count+3; warning.textContent=`Mindestens ${setup.count+3} Songs mit gültigem Jahr auswählen.`; }
+  const start = $("#start"); if(start){ start.disabled = count < setup.count + 3; start.title = start.disabled ? `Mindestens ${setup.count+3} gültige Songs auswählen` : ""; }
+}
+function renderSongSelection(){
+  const list = $("#songSelection"); if(!list) return;
+  list.innerHTML = songs.map((s,i)=>`<label class="song-option"><input type="checkbox" data-song="${i}" ${s.enabled!==false?"checked":""}><span><b>${esc(s.t||"Ohne Titel")}</b><small>${esc(s.a||"Ohne Interpret")} · ${validYear(s.y)?esc(s.y):"Jahr fehlt"}</small></span></label>`).join("");
+  list.querySelectorAll("input").forEach(input=>input.onchange=()=>{ songs[+input.dataset.song].enabled=input.checked; saveSongs(); selectionSummary(); });
+  selectionSummary();
+}
+function bindSongSelection(){
+  renderSongSelection();
+  $("#dSelection").ontoggle = e=>setupOpen.songs=e.target.open;
+  $("#selectAll").onclick=()=>{ songs.forEach(s=>s.enabled=true); saveSongs(); renderSongSelection(); };
+  $("#selectNone").onclick=()=>{ songs.forEach(s=>s.enabled=false); saveSongs(); renderSongSelection(); };
+  $("#manageSongs").onclick=()=>{ renderSongs(); openM("#mSongs"); };
+  $("#newSongForm").onsubmit=e=>{
+    e.preventDefault(); const form=e.currentTarget, fields=new FormData(form);
+    const a=String(fields.get("artist")||"").trim(), t=String(fields.get("title")||"").trim(), y=fields.get("year"), link=parseLink(fields.get("link"));
+    if(!a || !t || !validYear(y)){ toast("Bitte Interpret, Titel und ein gültiges Jahr eintragen."); return; }
+    if(link.bad){ toast("Bitte einen YouTube- oder Spotify-Songlink eintragen."); return; }
+    if(songs.some(s=>songKey(s)===songKey({a,t}))){ toast("Dieser Song ist bereits in der Liste."); return; }
+    songs.push({a,t,y:Number(y),c:0,enabled:true,yt:[],...link}); saveSongs(); form.reset(); renderSongSelection(); toast("Song hinzugefügt und ausgewählt.");
+  };
+}
+
+function renderSpotifyBox(){
+  const uri = redirectUri();
+  if(spConnected()){
+    const st = SP.failed ? `⚠︎ ${esc(SP.err||"Problem")} – es läuft YouTube.` : SP.ready ? "✓ bereit" : "lädt beim ersten Song …";
+    return `<p style="margin:0 0 10px"><b>Spotify verbunden</b>${SP.user?` als ${esc(SP.user)}`:""}. <span class="mut">${st}</span></p>
+      <p class="hint">Songs laufen über Spotify, ab Anfang, 90 Sekunden. Wird ein Song dort nicht gefunden, springt YouTube ein.</p>
+      <button class="btn sm ghost" id="spOut">Spotify trennen</button>`;
+  }
+  return `<p class="hint" style="margin-top:0">Standard ist YouTube. Mit <b>Spotify Premium</b> könnt ihr stattdessen über Spotify hören – einmalig einrichten:</p>
+    <details><summary class="hint" style="cursor:pointer"><b>Spotify einrichten</b></summary>
+      <ol class="steps">
+        <li>Auf <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> mit deinem Spotify-Konto anmelden → <b>Create app</b>.</li>
+        <li>Name egal. Als <b>Redirect URI</b> genau diese Adresse eintragen:<code class="uri">${esc(uri)}</code></li>
+        <li>Bei den APIs <b>Web API</b> und <b>Web Playback SDK</b> anhaken, speichern.</li>
+        <li>Unter <b>Settings</b> die <b>Client ID</b> kopieren und hier einfügen.</li>
+        <li>Unter <b>User Management</b> die E-Mail-Adressen der Spotify-Konten eintragen, die sich verbinden dürfen – mindestens deine eigene.</li>
+      </ol></details>
+    <label class="l" style="margin-top:10px">Client ID</label>
+    <div class="row spotify-connect"><input type="text" id="spClient" placeholder="z. B. 3f2a…" value="${esc(SP.clientId)}"><button class="btn sm" id="spIn" style="flex:0 0 auto">Mit Spotify verbinden</button></div>`;
+}
+function bindSpotifyBox(){
+  const out = $("#spOut"); if(out) out.onclick = () => { spLogout(); renderSetup(); toast("Spotify getrennt."); };
+  const cl = $("#spClient"); if(cl) cl.oninput = e => { SP.clientId = e.target.value.trim(); store.set("kh_sp_client", SP.clientId); };
+  const inb = $("#spIn"); if(inb) inb.onclick = spLogin;
+}
+function donationFooter(){
+  return `<footer class="donation-footer"><div><strong>Hät et Spass jemaht?</strong><p>Dann spendier mir e lecker Kölsch.</p></div><button class="donation-button" id="donate">🍺 Kölsch spendiere!</button></footer>`;
+}
+function donate(){
+  if(DONATE_URL) window.open(DONATE_URL,"_blank","noopener");
+  else toast("Der Spendenlink ist noch nicht hinterlegt.");
+}
+
+function startGame(){
+  unlockAudio(); spActivate();
+  const names = setup.names.slice(0, setup.count).map(s=>s.trim()).filter(Boolean);
+  const pool = shuffle(songs.filter(s=>s.enabled!==false && s.a && s.t && validYear(s.y)).map(s=>({...s,y:+s.y})));
+  if(!names.length){ toast("Mindestens ein Team, bitte."); return; }
+  if(pool.length < names.length+3){ toast("Bitte mehr Songs auswählen."); return; }
+  game = { players:names.map(name=>({name,cards:isDuel()?[]:[pool.pop()],kamelle:0,bonusTotal:0})),deck:pool,turn:0,current:null,phase:"draw",lastSlot:null,lastOk:null,newCard:null,bonus:{},modeBag:[] };
+  $("#btnNew").style.display="";
+  draw();
+}
+function draw(){
+  if(!game.deck.length) return endGame(true);
+  if(setup.mode==="mix" && !game.modeBag.length) game.modeBag=shuffle(["hoer","artist","title"]);
+  game.roundMode=setup.mode==="mix"?game.modeBag.pop():setup.mode;
+  Object.assign(game,{current:game.deck.pop(),phase:"place",lastSlot:null,lastOk:null,bonus:{},newCard:null});
+  renderGame(); app.focus({preventScroll:true}); scrollTo(0,0);
+  startSong(game.current,true);
+}
+function bonusPanel(){
+  const fields=roundMode().fields;
+  if(!fields.length) return "";
+  const earned=fields.filter(k=>game.bonus[k]===true).length;
+  return `<div class="bonus-box">
+    <p class="bonus-note">Was wurde vor dem Aufdecken richtig genannt?</p>
+    ${fields.map(k=>`<div class="bonus-line"><strong>${FIELD_NAMES[k]}</strong><div class="bonus-choices">
+      <button data-bonus="${k}" data-correct="yes" aria-label="${FIELD_NAMES[k]} richtig, ein Bonuspunkt" aria-pressed="${game.bonus[k]===true}">Richtig +1</button>
+      <button data-bonus="${k}" data-correct="no" aria-label="${FIELD_NAMES[k]} nicht gewusst" aria-pressed="${game.bonus[k]===false}">Nicht gewusst</button>
+    </div></div>`).join("")}
+    <p class="bonus-total" role="status">${earned} ${earned===1?"Bonuspunkt":"Bonuspunkte"} in dieser Runde</p>
+    ${bonusComplete()?"":'<button class="btn sm ghost" id="noMoreBonus">Kein weiterer Treffer</button>'}
+  </div>`;
+}
+function renderGame(){
+  const g=game, Pl=g.players[g.turn], s=g.current, mode=roundMode(), duel=isDuel(), bonusEnabled=setup.mode!=="quiz";
+  let face;
+  if(g.phase==="place"){
+    if(g.roundMode==="quiz") face=`<div class="card shown" id="theCard"><div class="artist">${esc(s.a)}</div><div class="title">${esc(s.t)}</div><div class="year">????</div></div>`;
+    else if(g.roundMode==="artist" || g.roundMode==="title"){
+      const showArtist=g.roundMode==="artist";
+      face=`<div class="card mystery" id="theCard"><div class="prompt">${showArtist?"Interpret vorgegeben":"Titel vorgegeben"}</div><div class="given">${esc(showArtist?s.a:s.t)}</div><div class="missing">${showArtist?"Wie heißt der Song?":"Wer singt das?"}</div></div>`;
+    } else face=`<div class="card mystery" id="theCard"><div class="q">?</div><div class="eq" id="pEq"><i></i><i></i><i></i><i></i><i></i></div></div>`;
+  } else face=`<div class="card shown ${duel?"":g.lastOk?"ok":"bad"}" id="theCard"><div class="artist">${esc(s.a)}</div><div class="title">${esc(s.t)}</div>${duel?"":`<div class="year">${s.y}</div>${s.c?"":'<div class="flag">Jahr nicht abschließend geprüft</div>'}`}</div>`;
+  let below="";
+  if(g.phase==="result"){
+    if(!duel) below+=`<div class="verdict" style="color:${g.lastOk?"var(--ok)":"var(--rot)"}">${g.lastOk?"Jot jemaht!":"Leider daneben"}</div>`;
+    below+=bonusPanel();
+    below+=`<button class="btn big" id="next" ${bonusComplete()?"":"disabled"}>${progressOf(Pl)>=setup.target?"Ergebnis anzeigen":g.players.length===1?"Nächster Song":"Nächstes Team"}</button>`;
+  }
+  let tl="";
+  if(!duel) for(let i=0;i<=Pl.cards.length;i++){
+    if(g.phase==="place") tl+=`<button class="slot" data-i="${i}" aria-label="${i===0?"Vor "+Pl.cards[0].y:i===Pl.cards.length?"Nach "+Pl.cards[i-1].y:"Zwischen "+Pl.cards[i-1].y+" und "+Pl.cards[i].y} einordnen">+</button>`;
+    else if(i===g.lastSlot && !g.lastOk) tl+='<div class="slot miss">✕</div>';
+    if(i<Pl.cards.length){const c=Pl.cards[i];tl+=`<div class="tcard ${c===g.newCard?"new":""}"><div class="y">${c.y}</div><div class="t">${esc(c.t)}</div><div class="a">${esc(c.a)}</div></div>`;}
+  }
+  const others=g.players.map((p,i)=>i===g.turn?"":`<div class="item" style="display:block"><b>${esc(p.name)}</b><span class="mut"> · ${progressOf(p)} ${duel?"Punkte":"Karten"}${bonusEnabled?` · ${p.kamelle} Kamelle`:""}</span>${duel?"":`<div class="mini">${p.cards.map(c=>`<span><b>${c.y}</b> ${esc(c.t)}</span>`).join("")}</div>`}</div>`).join("");
+  app.innerHTML=`
+    <div class="teams">${g.players.map((p,i)=>`<div class="tchip ${i===g.turn?"on":""}">${esc(p.name)} <span>${progressOf(p)}/${setup.target}${duel?" Pkt.":bonusEnabled?` · ${p.kamelle} 🍬`:""}</span></div>`).join("")}</div>
+    <div class="turn-heading"><h2>${esc(Pl.name)} ist dran</h2><span>${mode.label}</span></div>
+    <div class="stage">
+      <div class="cardcol">
+        <div class="cardwrap" id="cardSlot">${face}</div>
+        <div class="controls"><button class="cbtn" id="pRestart" aria-label="Von vorn abspielen">↺</button><button class="play" id="pPlay" aria-label="Abspielen">▶︎</button><button class="cbtn" id="pNext" aria-label="Nächste Audioquelle">↻</button></div>
+        <div class="status" id="pStatus" role="status"></div>
+        ${below}
+      </div>
+      <div>
+        ${duel?`${g.phase==="place"?'<p class="answer-prompt">Interpret und Titel laut nennen. Dann gemeinsam auflösen.</p><button class="btn big" id="reveal">Aufdecken</button>':""}<div class="duel-board">${g.players.map(p=>`<div class="duel-score"><span>${esc(p.name)}</span><b>${p.bonusTotal} Punkte</b></div>`).join("")}</div>`:`${g.phase==="place"?`<p class="answer-prompt">${mode.fields.length?mode.fields.map(k=>FIELD_NAMES[k]).join(" und ")+" laut nennen. Dann das Jahr einordnen.":"Wo gehört der Song hin?"}</p>`:""}<p class="timeline-hint">Dein Zeitstrahl <span>← wischen →</span></p><div class="timeline" tabindex="0" aria-label="Zeitstrahl, seitlich scrollbar">${tl}</div>`}
+        <details class="box more" style="margin-top:14px"><summary>Mehr <small>${bonusEnabled?`${Pl.kamelle} 🍬 · `:""}${g.deck.length} im Stapel</small></summary>
+          ${bonusEnabled?`<p class="hint">${Pl.bonusTotal} Bonuspunkte gesammelt · ${Pl.kamelle} Kamelle verfügbar</p><div class="item"><span>Song überspringen <span class="mut">(1 🍬)</span></span><button class="btn sm ghost" id="skip" ${Pl.kamelle<1||g.phase!=="place"?"disabled":""}>Überspringen</button></div>${duel?"":`<div class="item"><span>Karte kaufen <span class="mut">(3 🍬)</span></span><button class="btn sm ghost" id="trade" ${Pl.kamelle<3||g.phase!=="place"?"disabled":""}>Eintauschen</button></div>`}`:""}
+          <div class="item"><span>Song läuft nicht?</span><a class="btn sm ghost" href="${ytLink(s)}" target="_blank" rel="noopener" style="text-decoration:none">YouTube-Suche</a></div>
+          ${g.phase==="result" && P.title?`<p class="hint">Gespielt: ${esc(P.title)}${P.link?` · <a href="${esc(P.link)}" target="_blank" rel="noopener">öffnen</a>`:""}</p>`:""}${others}
+        </details>
+      </div>
+    </div>`;
+  app.querySelectorAll(".slot[data-i]").forEach(b=>b.onclick=()=>place(+b.dataset.i));
+  app.querySelectorAll("[data-bonus]").forEach(b=>b.onclick=()=>setBonus(b.dataset.bonus,b.dataset.correct==="yes"));
+  const on=(id,fn)=>{const el=$(id);if(el)el.onclick=fn;};
+  on("#skip",skipSong);on("#trade",tradeCard);on("#next",nextTurn);on("#reveal",revealDuel);
+  on("#noMoreBonus",()=>{if(!game || game.phase!=="result")return;roundMode().fields.forEach(k=>{if(game.bonus[k]===undefined)game.bonus[k]=false;});renderGame();$("#next").focus({preventScroll:true});});
+  on("#pPlay",togglePlay);on("#pRestart",restart);on("#pNext",nextMatch);
+  on("#theCard",()=>{if(P.state==="blocked" && P.mode!=="yt")togglePlay();});
+  updatePlayerUI();placeYT();requestAnimationFrame(placeYT);
+}
+function setBonus(field,correct){
+  if(!game || game.phase!=="result" || !roundMode().fields.includes(field) || typeof correct!=="boolean")return;
+  const Pl=game.players[game.turn],previous=game.bonus[field]===true?1:0,delta=(correct?1:0)-previous;
+  game.bonus[field]=correct;Pl.kamelle+=delta;Pl.bonusTotal+=delta;
+  renderGame();
+  const choice=app.querySelector(`[data-bonus="${field}"][data-correct="${correct?"yes":"no"}"]`);if(choice)choice.focus({preventScroll:true});
+}
+function revealDuel(){
+  if(!game || game.phase!=="place" || !isDuel())return;
+  game.phase="result";renderGame();
+}
+function place(i){
+  if(!game || isDuel() || game.phase!=="place" || !Number.isInteger(i) || i<0 || i>game.players[game.turn].cards.length)return;
+  const g=game,Pl=g.players[g.turn],c=Pl.cards,y=g.current.y;
+  const ok=(i===0 || c[i-1].y<=y)&&(i===c.length || c[i].y>=y);
+  Object.assign(g,{lastSlot:i,lastOk:ok,phase:"result",newCard:null});
+  if(ok){c.splice(i,0,g.current);g.newCard=g.current;}
+  renderGame();
+}
+function skipSong(){
+  if(!game || game.phase!=="place")return;
+  const Pl=game.players[game.turn];if(Pl.kamelle<1)return;
+  Pl.kamelle--;game.deck.unshift(game.current);draw();toast("Übersprungen.");
+}
+function tradeCard(){
+  if(!game || isDuel() || setup.mode==="quiz" || game.phase!=="place")return;
+  const g=game,Pl=g.players[g.turn];if(Pl.kamelle<3 || !g.deck.length)return;
+  Pl.kamelle-=3;const free=g.deck.shift();Pl.cards.push(free);Pl.cards.sort((a,b)=>a.y-b.y);g.newCard=free;
+  toast(`Gekauft: ${free.t} (${free.y})`);
+  if(progressOf(Pl)>=setup.target)return endGame(false,Pl);
+  renderGame();
+}
+function nextTurn(){
+  if(!game || game.phase!=="result" || !bonusComplete())return;
+  const g=game,Pl=g.players[g.turn];
+  if(progressOf(Pl)>=setup.target)return endGame(false,Pl);
+  g.turn=(g.turn+1)%g.players.length;draw();
+}
+function endGame(deckEmpty,winner){
+  stopAll();P.song=null;P.mode=null;
+  const g=game;g.phase="finished";
+  const highest=Math.max(...g.players.map(progressOf));
+  const winners=winner?[winner]:g.players.filter(p=>progressOf(p)===highest);
+  game=null;placeYT();game=g;
+  app.innerHTML=`<div class="end"><div class="hint">${deckEmpty?"Der Stapel ist leer.":"Ziel erreicht!"}</div><div class="big">${winners.map(p=>esc(p.name)).join(" & ")}</div><div style="font-weight:700;font-size:20px">${winners.length>1?"teilen sich den Sieg":"hat gewonnen!"}</div>
+  <div class="mini" style="justify-content:center;margin:18px 0 22px">${g.players.map(p=>`<span>${esc(p.name)}: <b>${progressOf(p)}</b> ${isDuel()?"Punkte":"Karten"}${!isDuel() && setup.mode!=="quiz"?` · ${p.bonusTotal} Bonuspunkte`:""}</span>`).join("")}</div>
+  <div class="row" style="max-width:420px;margin:auto"><button class="btn" id="again">Noch eine Runde</button><button class="btn ghost" id="toSetup">Einstellungen</button></div>${donationFooter()}</div>`;
+  $("#again").onclick=startGame;$("#toSetup").onclick=renderSetup;if($("#donate"))$("#donate").onclick=donate;
+  app.focus({preventScroll:true});scrollTo(0,0);
+}
+
+
+/* =========================================================
+   SONGLISTE
+   ========================================================= */
+const testStatus = {};
+let listPlaying = null;
+function linkValue(s){ return s.sp ? "https://open.spotify.com/track/"+s.sp : s.u ? "https://youtu.be/"+s.u : ""; }
+function renderSongs(){
+  $("#songCount").textContent = songs.length;
+  const tb = $("#songRows"); tb.innerHTML = "";
+  songs.forEach((s,i)=>{
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><input type="text" data-k="a" aria-label="Interpret" value="${esc(s.a)}"></td>
+      <td><input type="text" data-k="t" aria-label="Titel" value="${esc(s.t)}"></td>
+      <td><input type="number" data-k="y" aria-label="Erscheinungsjahr" min="1800" max="${new Date().getFullYear()}" value="${esc(s.y)}"></td>
+      <td><span class="tag ${s.c?"ok":""}">${s.c?"vorgegeben":"bitte prüfen"}</span></td>
+      <td><input type="text" class="lnk" data-k="link" aria-label="Eigener Musiklink" placeholder="YouTube/Spotify" value="${esc(linkValue(s))}"></td>
+      <td><div style="display:flex;gap:4px;align-items:center"><button class="btn sm ghost" data-act="play" aria-label="Song anhören oder pausieren" title="Anhören">▶︎</button><button class="btn sm ghost" data-act="alt" aria-label="Andere Quelle testen" title="Nächste Quelle">↻</button><span class="st">${testStatus[songKey(s)]||""}</span></div></td>
+      <td><button class="btn sm ghost" data-act="del" aria-label="Song löschen" title="Löschen">✕</button></td>`;
+    tr.querySelectorAll("input").forEach(inp => inp.oninput = e => {
+      const k = e.target.dataset.k;
+      if(k === "y"){ s.y = e.target.value === "" ? null : +e.target.value; s.c = 0; const tg = tr.querySelector(".tag"); tg.className = "tag"; tg.textContent = "bitte prüfen"; }
+      else if(k === "link"){
+        const r = parseLink(e.target.value);
+        if(r.bad){ e.target.style.borderColor = "var(--rot)"; return; }
+        e.target.style.borderColor = ""; s.u = r.u; s.sp = r.sp; delete spCache[songKey(s)];
+      } else { delete spCache[songKey(s)]; delete s._it; s[k] = e.target.value; }
+      saveSongs();
+    });
+    tr.querySelector('[data-act="del"]').onclick = () => { songs.splice(i,1); saveSongs(); renderSongs(); };
+    tr.querySelector('[data-act="play"]').onclick = e => {
+      unlockAudio(); spActivate();
+      if(listPlaying === s){ stopAll(); listPlaying = null; e.currentTarget.textContent = "▶︎"; return; }
+      document.querySelectorAll('#songRows [data-act="play"]').forEach(b=>b.textContent="▶︎");
+      listPlaying = s; e.currentTarget.textContent = "❚❚"; startSong(s, true); watchListTitle(s);
+    };
+    tr.querySelector('[data-act="alt"]').onclick = () => { unlockAudio(); spActivate(); if(listPlaying !== s){ listPlaying = s; startSong(s,true); } else nextMatch(); watchListTitle(s); };
+    tb.appendChild(tr);
+  });
+}
+function setStatus(s, html){
+  testStatus[songKey(s)] = html;
+  const row = document.querySelectorAll("#songRows tr")[songs.indexOf(s)];
+  if(row) row.querySelector(".st").innerHTML = html;
+}
+function watchListTitle(s){
+  let n = 0; const iv = setInterval(()=>{
+    n++; if(P.song !== s || n > 40){ clearInterval(iv); return; }
+    if(P.state === "playing"){ setStatus(s, "✓ " + esc((SRC[P.mode]||"")+": "+(P.title||"läuft"))); clearInterval(iv); }
+    else if(P.state === "none"){ setStatus(s, "✗ nichts gefunden"); clearInterval(iv); }
+    else if(P.state === "blocked"){ setStatus(s, "im Spiel einmal antippen"); clearInterval(iv); }
+  }, 300);
+}
+function ytTestId(id){
+  return new Promise(res=>{
+    let done = false;
+    const fin = r => { if(done) return; done = true; clearTimeout(t); testHook = null; try{ ytPlayer.stopVideo(); }catch(e){} res(r); };
+    testHook = { cancel: () => fin({ok:null}), state: s => { if(s===1){ let title = ""; try{ title = ytPlayer.getVideoData().title||""; }catch(e){} fin({ok:true, title}); } }, error: () => fin({ok:false}) };
+    const t = setTimeout(()=>fin({ok:null}), 9000);
+    try{ ytPlayer.mute(); ytPlayer.loadVideoById({ videoId:id, startSeconds:0, endSeconds:3 }); }catch(e){ fin({ok:false}); }
+  });
+}
+async function testSong(s, run){
+  const current = ()=>run===testRun;
+  if(spConnected() && !SP.failed){
+    try{ const tr = await spFindTrack(s); if(!current()) return false; if(tr){ setStatus(s, "✓ Spotify: " + esc(tr.title)); return true; } }catch(e){}
+  }
+  if(!current()) return false;
+  if(ytReady){
+    const cands = candidatesFor(s).filter(c=>c.type==="yt"); let unclear = false;
+    for(let k=0;k<cands.length;k++){
+      if(!current()) return false;
+      setStatus(s, `teste Video ${k+1}/${cands.length} …`);
+      const r = await ytTestId(cands[k].id);
+      if(!current()) return false;
+      if(r.ok){ ytOk[songKey(s)] = cands[k].id; saveYt(); setStatus(s, "✓ YouTube: " + esc(r.title||"läuft")); return true; }
+      if(r.ok === false){ ytBad.add(cands[k].id); saveYt(); } else unclear = true;
+    }
+    if(unclear){ setStatus(s, "? keine Antwort – später nochmal"); return false; }
+  }
+  if(!current()) return false;
+  const f = await itunesPreview(s);
+  if(!current()) return false;
+  setStatus(s, f ? "⚠︎ nur 30-Sek.-Ausschnitt" : "✗ nichts gefunden – eigenen Link eintragen");
+  return !!f;
+}
+let testing = false, testRun = 0;
+function cancelTests(){
+  testRun++; testing = false;
+  if(testHook && testHook.cancel) testHook.cancel();
+  try{ ytPlayer && ytPlayer.unMute(); }catch(e){}
+  $("#testAll").textContent = "Alle Songs testen";
+  document.querySelectorAll('#mSongs input, #mSongs textarea, #mSongs button:not(#testAll):not([data-close])').forEach(el=>el.disabled=false);
+}
+$("#testAll").onclick = async () => {
+  if(testing){ cancelTests(); stopAll(); return; }
+  if(!ytReady && !ytFailed && !spConnected()){ toast("YouTube lädt noch – gleich nochmal."); return; }
+  testing = true; const run = ++testRun; stopAll(); listPlaying = null; renderSongs();
+  document.querySelectorAll('#mSongs input, #mSongs textarea, #mSongs button:not(#testAll):not([data-close])').forEach(el=>el.disabled=true);
+  const btn = $("#testAll"); let ok = 0, n = 0; const list = songs.filter(s=>s.a && s.t);
+  try {
+    for(const s of list){
+      if(run!==testRun) return;
+      btn.textContent = `Abbrechen · ${++n}/${list.length}`;
+      if(await testSong(s, run)) ok++;
+    }
+    if(run===testRun){ cancelTests(); btn.textContent = `${ok}/${list.length} spielbar · erneut testen`; }
+  } catch(e){ if(run===testRun){ cancelTests(); toast("Test abgebrochen. Bitte erneut versuchen."); } }
+};
+$("#addSong").onclick = () => { songs.push({a:"",t:"",y:new Date().getFullYear(),c:0,yt:[]}); saveSongs(); renderSongs(); const rows = $("#songRows").querySelectorAll("tr"); rows[rows.length-1].querySelector("input").focus(); };
+$("#resetSongs").onclick = () => { songs = DEFAULT_SONGS.map(s=>({...s, yt:[...s.yt]})); saveSongs(); renderSongs(); toast("Standardliste wiederhergestellt."); };
+$("#exportSongs").onclick = async () => {
+  const txt = JSON.stringify(songs.map(({_it,...s})=>s));
+  try{ await navigator.clipboard.writeText(txt); toast("Liste kopiert."); }
+  catch(e){ $("#importBox").style.display = "block"; $("#importText").value = txt; $("#importText").select(); toast("Bitte manuell kopieren."); }
+};
+$("#importToggle").onclick = () => { const b = $("#importBox"); b.style.display = b.style.display==="none" ? "block" : "none"; };
+$("#doImport").onclick = () => {
+  try{
+    const arr = JSON.parse($("#importText").value); if(!Array.isArray(arr)) throw 0;
+    const imported = arr.filter(s=>s && s.a && s.t && validYear(s.y)).map(s=>({ a:String(s.a), t:String(s.t), y:+s.y, c:0, enabled:s.enabled!==false, yt:Array.isArray(s.yt)?s.yt.filter(x=>/^[\w-]{11}$/.test(x)):[], u:/^[\w-]{11}$/.test(s.u||"")?s.u:undefined, sp:/^[A-Za-z0-9]{22}$/.test(s.sp||"")?s.sp:undefined }));
+    if(!imported.length) throw new Error("empty");
+    songs = imported; saveSongs(); renderSongs(); toast(songs.length + " Songs übernommen.");
+  }catch(e){ toast("Das war kein gültiges Listenformat."); }
+};
+
+/* ---------- Fenster & Start ---------- */
+let modalReturnFocus = null;
+const openM = id => { modalReturnFocus = document.activeElement; $(id).classList.add("open"); app.inert=true; $(".topbar").inert=true; ytHost.inert=true; document.body.classList.add("modal-open"); $(id).querySelector("button").focus(); };
+document.addEventListener("keydown", e=>{
+  const modal = document.querySelector(".modal.open"); if(!modal) return;
+  if(e.key==="Escape"){ e.preventDefault(); modal.querySelector("[data-close]").click(); }
+  if(e.key==="Tab"){
+    const focusables = [...modal.querySelectorAll('button:not(:disabled), input:not(:disabled), textarea:not(:disabled), a[href], summary')].filter(el=>el.getClientRects().length);
+    const first=focusables[0], last=focusables[focusables.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+});
+document.querySelectorAll(".modal").forEach(m => m.addEventListener("click", e => {
+  if(e.target !== m && !e.target.hasAttribute("data-close")) return;
+  m.classList.remove("open"); app.inert=false; $(".topbar").inert=false; ytHost.inert=false; renderSongSelection(); document.body.classList.remove("modal-open");
+  if(modalReturnFocus && modalReturnFocus.isConnected) modalReturnFocus.focus();
+  if(m.id === "mSongs"){
+    cancelTests();
+    if(listPlaying){ listPlaying = null; stopAll(); }
+    if(game && game.phase!=="finished" && game.current && $("#theCard")){ startSong(game.current, false); renderGame(); }
+    else { stopAll(); P.song=null; }
+  }
+}));
+$("#btnSongs").onclick = () => { renderSongs(); openM("#mSongs"); };
+$("#btnRules").onclick = () => openM("#mRules");
+$("#btnNew").onclick = renderSetup;
+
+spHandleRedirect().then(()=>{ if(spConnected()) spBoot(); renderSetupIfOpen(); });
+renderSetup();
+</script>
+</body>
+</html>
+
+
