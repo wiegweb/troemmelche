@@ -936,7 +936,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .text-button,.icon-button{border:0;background:transparent;color:var(--rot);font:inherit;font-weight:600;min-height:44px;padding:8px 4px;border-radius:8px;cursor:pointer}
 .text-button{font-size:13px}.icon-button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;padding:12px}
 .icon-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-#addSong{font-size:28px;font-weight:400;margin-left:auto}.text-button:hover,.icon-button:hover{background:var(--tint)}
+#addSong{margin-left:auto;white-space:nowrap}.text-button:hover,.icon-button:hover{background:var(--tint)}
 .song-selection{max-height:440px;margin:4px 0 8px;scrollbar-width:thin}
 .song-option{gap:0;padding:8px 0;cursor:default}
 .song-check{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer;min-height:44px}
@@ -947,11 +947,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .rules{padding-left:22px;font-size:15px;line-height:1.5}.rules li{margin:0 0 16px;padding-left:3px}.rules strong{display:block;color:var(--ink);font-size:16px;margin-bottom:3px}
 @media(max-width:380px){header{padding:14px 16px}.song-check{gap:7px}.song-option .icon-button{padding:13px}.selection-actions{gap:3px}.text-button{font-size:12px}}
 
+
+.brand{min-width:0}.header-subtitle{color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:13px;font-weight:400;letter-spacing:0;line-height:1.35;margin:5px 0 0;white-space:normal}
+@media(max-width:380px){.header-subtitle{font-size:12px}.selection-actions .text-button{font-size:11px;padding-left:2px;padding-right:2px}}
 </style>
 </head>
 <body>
 <div class="topbar"><header>
-  <div class="logo"><span class="mark"></span><h1 id="gameName"></h1></div>
+  <div class="brand"><div class="logo"><h1 id="gameName"></h1></div><p class="header-subtitle">Welche Session war dat noch ens?</p></div>
   <div class="nav">
     <button class="ib" id="btnNew" style="display:none">↺ Neu</button>
     <button class="ib" id="btnRules" aria-label="Regeln">?</button>
@@ -1013,16 +1016,16 @@ const RULES = [
   "<strong>Jahr einordnen.</strong> Auf eine Lücke im Zeitstrahl tippen. Richtig? Karte behalten. Gleiche Jahre dürfen nebeneinander liegen. Es zählt das Erscheinungsjahr.",
   "<strong>Bonuspunkte.</strong> Nach dem Aufdecken jeden richtigen Tipp bestätigen: je <b>1 Punkt + 1 Kamelle</b>, auch bei falschem Jahr. Vorgegebene Angaben zählen nicht.",
   "<strong>Kamelle einsetzen.</strong> <b>1</b> zum Überspringen, <b>3</b> für eine Karte. Eure Bonuspunkte bleiben erhalten.",
-  "<strong>Ziel erreichen.</strong> Die gewählte Kartenzahl gewinnt. Im <b>Songduell</b> zählt stattdessen das Punkteziel – ohne Zeitstrahl."
+  "<strong>Ziel erreichen.</strong> Die gewählte Kartenzahl gewinnt. Bei <b>Ohne Zeitstrahl</b> zählt stattdessen das Punkteziel."
 ];
 
 const MODES = {
-  hoer:{label:"Klassisch",hint:"Interpret und Titel erraten. Bis zu 2 Bonuspunkte pro Song.",fields:["a","t"]},
-  artist:{label:"Titel raten",hint:"Interpret ist vorgegeben. Erratet den Titel: 1 Bonuspunkt.",fields:["t"]},
-  title:{label:"Interpret raten",hint:"Titel ist vorgegeben. Erratet den Interpreten: 1 Bonuspunkt.",fields:["a"]},
-  mix:{label:"Mix",hint:"Klassisch, Titel raten und Interpret raten wechseln von Song zu Song.",fields:[]},
-  quiz:{label:"Nur das Jahr",hint:"Interpret und Titel sind sichtbar. Nur das Jahr einordnen, ohne Bonus.",fields:[]},
-  duel:{label:"Songduell",hint:"Ohne Zeitstrahl: Interpret und Titel erraten. Je 1 Punkt, erster am Punkteziel gewinnt.",fields:["a","t"]}
+  hoer:{label:"Klassisch",hint:"In den Zeitstrahl einordnen. Titel und Interpret für Bonuspunkte erraten.",fields:["a","t"]},
+  quiz:{label:"Nur das Jahr",hint:"Nur das Jahr einordnen. Interpret und Titel sind sichtbar, ohne Bonus.",fields:[]},
+  artist:{label:"Nur Titel raten",hint:"Interpret ist vorgegeben. Erratet den Titel: 1 Bonuspunkt. Das Jahr ordnet ihr in den Zeitstrahl ein.",fields:["t"]},
+  title:{label:"Nur Interpret raten",hint:"Titel ist vorgegeben. Erratet den Interpreten: 1 Bonuspunkt. Das Jahr ordnet ihr in den Zeitstrahl ein.",fields:["a"]},
+  mix:{label:"Mix",hint:"Klassisch, Nur Titel raten und Nur Interpret raten wechseln von Song zu Song.",fields:[]},
+  duel:{label:"Ohne Zeitstrahl",hint:"Interpret und Titel erraten. Je 1 Punkt. Wer zuerst das Punkteziel erreicht, gewinnt.",fields:["a","t"]}
 };
 const FIELD_NAMES = {a:"Interpret",t:"Titel"};
 const roundMode = () => MODES[game?.roundMode || setup.mode] || MODES.hoer;
@@ -1573,7 +1576,6 @@ function renderSetup(){
   const spState = !SP.clientId ? "aus" : spConnected() ? (SP.failed ? "Problem" : SP.ready ? "verbunden" : "verbunden") : "nicht verbunden";
   app.innerHTML = `
   <div class="setup" id="setupRoot">
-    <div class="hero"><p class="claim">Welche Session war dat noch ens?</p></div>
     <div class="stack">
       <div class="box">
         <label class="l">Teams</label>
@@ -1595,7 +1597,7 @@ function renderSetup(){
       <details class="box" id="dSelection" ${setupOpen.songs?"open":""}>
         <summary>Songauswahl <small id="selectionCount"></small></summary>
         <p class="hint">Angehakt heißt: im Stapel. Automatisch auf diesem Gerät gespeichert.</p>
-        <div class="selection-actions"><button class="text-button" id="selectAll">Alle auswählen</button><button class="text-button" id="selectNone">Keine auswählen</button><button class="icon-button" id="addSong" aria-label="Song hinzufügen">+</button></div>
+        <div class="selection-actions"><button class="text-button" id="selectAll">Alle auswählen</button><button class="text-button" id="selectNone">Keine auswählen</button><button class="text-button" id="addSong" aria-label="Song hinzufügen">+ hinzufügen</button></div>
         <div class="song-selection" id="songSelection"></div>
         <div class="selection-footer"><button class="text-button" id="testAll">Alle testen</button><button class="text-button" id="backupSongs">Liste sichern</button></div>
       </details>
